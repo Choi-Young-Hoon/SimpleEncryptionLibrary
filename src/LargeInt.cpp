@@ -58,7 +58,7 @@ ael::LargeInt::LargeInt(LargeInt const& a){
     }
 }
 
-//Put a value to the first array og the LargeInt
+//Put a value to the first array of the LargeInt
 ael::LargeInt::LargeInt(unsigned int a){
     nombre.resize(1);
     nombre[0] = a;
@@ -72,12 +72,7 @@ ael::LargeInt::~LargeInt(){
 //Show the LargeInt value in the console
 const void ael::LargeInt::Show(){
     for(int i = nombre.size() - 1; i >= 0; i--){
-        if(nombre[i] != 0){
-            std::cout << std::hex << nombre[i] << " ";
-        }
-        else{
-            std::cout << 0 << " ";
-        }
+        std::cout << std::hex << nombre[i] << " ";
     }
     std::cout << std::endl;
 }
@@ -207,23 +202,6 @@ void ael::LargeInt::NumberGenerator(LargeInt& maxi, LargeInt& mini){
     }
     nombre[0] = (nombre[0] | 0x1);
 }
-
-//A pseudo-random number generator, which generate a number with a specified bit-length.
-/*LargeInt BitGenerator(unsigned int lenght){
-    LargeInt maxi(0x01), mini(0x0), un(0x01), result(0x0);
-
-    for(unsigned int k = 0; k < lenght; k++){
-        maxi.Decalage_Gauche();
-    }
-    mini = maxi;
-    //maxi -= un;
-    mini.Decalage_Droite();
-    //maxi.Show();
-    //mini.Show();
-    result.NumberGenerator(maxi, mini);
-
-    return result;
-}*/
 
 //Get the fisrt array of the vector number.
 unsigned int ael::LargeInt::GetFirst(){
@@ -401,7 +379,7 @@ void ael::LargeInt::operator-=(LargeInt const& a){
                 b.push_back((0x100000000 - a.nombre[i]) - memento);
                 memento = 1;
                 std::cout << "Impossible" << std::endl;
-                system("PAUSE");
+                //system("PAUSE");
             }
             else{
                 if(memento != 0){
@@ -594,7 +572,6 @@ void ael::LargeInt::operator%=(LargeInt const &a){
     reste2 = alpha;
 
     reste2 *= bb;
-    //reste2.MultiplicationRusse(alpha, bb);
 
     if(reste2 > reste){
         std::cout << "Error : reste" << std::endl;
