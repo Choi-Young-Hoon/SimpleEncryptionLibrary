@@ -35,7 +35,6 @@
 #include <ctime>
 #include <math.h>
 #include <vector>
-//#include <time.h>
 #include <iomanip>
 
 namespace ael
@@ -51,17 +50,6 @@ namespace ael
 		static std::string Decrypt(std::string ciphertext, std::string key, int keybits = 128);
 
 	};
-	/*class RSA
-	{
-	public:
-
-		static bool GenerateKeys(unsigned long int digitCount, std::string *moduluskeys, std::string *privatexponent, std::string *publicexponent, unsigned long int precisionOfPrimality = 3);
-
-		static std::string Encrypt(std::string plaintext, std::string keymod, std::string keyexp);
-
-		static std::string Decrypt(std::string ciphertext, std::string keymod, std::string keyexp);
-
-	};*/
     /*class HASH
     {
     public:

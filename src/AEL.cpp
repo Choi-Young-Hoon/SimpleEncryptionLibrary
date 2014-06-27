@@ -31,10 +31,6 @@
 #include <string>
 #include <sstream>
 #include "AEL.hpp"
-//#include "KeyPair.h"
-//#include "Key.h"
-//#include "BigInt.h"
-//#include "RSA.h"
 #include "AES.hpp"
 //#include "MD5.h"
 
@@ -237,39 +233,6 @@ std::string ael::AES::GenerateKey(int keybits)
 	}
 	return key;
 }
-
-/*bool ael::RSA::GenerateKeys(unsigned long int digitCount, std::string *moduluskeys, std::string *privatexponent, std::string *publicexponent, unsigned long int precisionOfPrimality)
-{
-	std::srand(time(NULL));
-	KeyPair kp = RSAH::GenerateKeyPair(digitCount, precisionOfPrimality);
-	Key privatekey = kp.GetPrivateKey(), publickey = kp.GetPublicKey();
-	BigInt privkmod = privatekey.GetModulus(), privkexp = privatekey.GetExponent(), publikmod = publickey.GetModulus(), publikexp = publickey.GetExponent();
-	std::string privkmodt = privkmod.ToString(), privkexpt = privkexp, publikmodt = publikmod, publikexpt = publikexp;
-
-	if(privkmodt == publikmodt){
-		*moduluskeys = publikmodt;
-		*privatexponent = privkexpt;
-		*publicexponent = publikexpt;
-		return true;
-	}
-	else{
-		return false;
-	}
-}
-
-std::string ec::RSA::Encrypt(std::string plaintext, std::string keymod, std::string keyexp)
-{
-	BigInt keymods = keymod, keyexps = keyexp;
-	std::string encrypted = RSAH::Encrypt(plaintext, Key(keymods, keyexps));
-	return encrypted;
-}
-
-std::string ec::RSA::Decrypt(std::string cyphertext, std::string keymod, std::string keyexp)
-{
-	BigInt keymods = keymod, keyexps = keyexp;
-	std::string decrypted = RSAH::Decrypt(cyphertext, Key(keymods, keyexps));
-	return decrypted;
-}*/
 
 /*std::string ael::HASH::MD5(const std::string text){
     std::string hashs = md5(text);

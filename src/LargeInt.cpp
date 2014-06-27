@@ -33,13 +33,20 @@ ael::LargeInt::LargeInt(){
     nombre.clear();
 }
 
-//Not Working for now
+//Array of Bytes to LargeInt
 ael::LargeInt::LargeInt(std::string a){
-    unsigned int taille = floor(a.size() / (float)8);//, buffer = 0;
+    unsigned int taille = ceil(a.size() / 4.0), h = 0;
     nombre.resize(taille);
     for(unsigned int i = 0; i < taille; i++){
-        //buffer = 0x(a[i] - )
-        //nombre[i] =
+        nombre[i] = 0;
+		for(unsigned int j = 0; j < 4; j++){
+			h = i*4 + j;
+			if(h < a.size()){
+				h = a[i*4+j];
+				h <<= (j*8);
+				nombre[i] += h;
+			}
+		}
     }
 }
 
