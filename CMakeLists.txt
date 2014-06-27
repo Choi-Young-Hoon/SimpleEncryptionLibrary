@@ -22,8 +22,8 @@ file(
         source_files
 
         src/*
-
-        include/*
+		
+		include/AEL.hpp
 
 )
 

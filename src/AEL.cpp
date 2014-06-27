@@ -30,13 +30,13 @@
 #include <ctime>
 #include <string>
 #include <sstream>
-#include "AEL.h"
+#include "AEL.hpp"
 //#include "KeyPair.h"
 //#include "Key.h"
 //#include "BigInt.h"
 //#include "RSA.h"
 #include "AES.hpp"
-#include "MD5.h"
+//#include "MD5.h"
 
 //Public functions of Advanced Encryption Standard (AES) algorithm.
 
