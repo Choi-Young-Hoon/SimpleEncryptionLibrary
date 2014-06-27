@@ -25,11 +25,18 @@
  * ****************************************************************************
  */
 
-#ifndef AEL_H
-#define AEL_H
+#ifndef AEL_HPP
+#define AEL_HPP
 
 #include <string>
 #include <fstream>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <math.h>
+#include <vector>
+//#include <time.h>
+#include <iomanip>
 
 namespace ael
 {
@@ -62,6 +69,47 @@ namespace ael
         static std::string MD5(const std::string text);
 
     };*/
+	class LargeInt
+	{
+
+	public:
+		LargeInt();
+		LargeInt(std::string a);
+		LargeInt(LargeInt const& a);
+		LargeInt(unsigned int a);
+		~LargeInt();
+
+		const void Show();
+
+		void MultiplicationRusse(LargeInt const& a, LargeInt const& b);
+		void Modular_Exp(LargeInt& exposant, LargeInt& modulo);
+		void NumberGenerator(LargeInt& maxi, LargeInt& mini);
+
+		void Decalage_Droite();
+		void Decalage_Gauche();
+		void Generer(unsigned int taille);
+		unsigned int GetFirst();
+
+		bool operator==(LargeInt const& a);
+		bool operator!=(LargeInt const& a);
+		bool operator<(LargeInt const& a);
+		bool operator<=(LargeInt const& a);
+		bool operator>(LargeInt const& a);
+		bool operator>=(LargeInt const& a);
+
+		LargeInt& operator=(LargeInt const& a);
+		void operator+=(LargeInt const& a);
+		LargeInt& operator+(LargeInt const& a);
+		void operator-=(LargeInt const& a);
+		LargeInt& operator-(LargeInt const& a);
+		void operator*=(LargeInt const& a);
+		LargeInt& operator*(LargeInt const& a);
+		void operator%=(LargeInt const& a);
+		LargeInt& operator%(LargeInt const& a);
+
+	private:
+		std::vector<unsigned int> nombre;
+	};
 }
 
 #endif
