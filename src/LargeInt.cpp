@@ -24,16 +24,16 @@
  *
  * ****************************************************************************
  */
- 
+
 #include "AEL.hpp"
- 
+
 //Constructor
 ael::LargeInt::LargeInt(){
     nombre.resize(0);
     nombre.clear();
 }
 
-//Array of Bytes to LargeInt
+//String to LargeInt
 ael::LargeInt::LargeInt(std::string a){
     unsigned int taille = ceil(a.size() / 4.0), h = 0;
     nombre.resize(taille);
