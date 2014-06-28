@@ -28,7 +28,7 @@
 #include "AEL.hpp"
 
 //Number generator with specified bit-length
-ael::LargeInt BitGenerator(unsigned int lenght){
+ael::LargeInt ael::Algo::BitGenerator(unsigned int lenght){
     ael::LargeInt maxi(0x01), mini(0x0), un(0x01), result(0x0);
 
     for(unsigned int k = 0; k < lenght; k++){
@@ -44,7 +44,7 @@ ael::LargeInt BitGenerator(unsigned int lenght){
 }
 
 //Fermat Primality Test
-bool FermatPrimality(ael::LargeInt& b){
+bool ael::Algo::FermatPrimality(ael::LargeInt& b){
     ael::LargeInt bb(b), un(1), p(bb), deux(2), trois(3), cinq(5), sept(7);
     p -= un;
 
@@ -72,7 +72,7 @@ bool FermatPrimality(ael::LargeInt& b){
 }
 
 //Euclide Algorithm to calculate PGCD
-ael::LargeInt EuclideAlgoPGCD(ael::LargeInt& a, ael::LargeInt& b){
+ael::LargeInt ael::Algo::EuclideAlgoPGCD(ael::LargeInt& a, ael::LargeInt& b){
     ael::LargeInt reste(1), aa(a), bb(b), zero(0), un(1);
     while(reste != zero){
         reste = aa;
@@ -91,7 +91,7 @@ ael::LargeInt EuclideAlgoPGCD(ael::LargeInt& a, ael::LargeInt& b){
 }
 
 //Miller-Rabin Primality Test
-bool MillerRabinPrimality(ael::LargeInt& n0, unsigned int iterations){
+bool ael::Algo::MillerRabinPrimality(ael::LargeInt& n0, unsigned int iterations){
     ael::LargeInt n1(n0), un(1), n2(0), s(0), d(0), a(0), c1(0), c2(0), r(0), s2(0), e(0), zero(0), plusa(0xFFFFF), deux(2), b(0);
     bool status = false;
     n1 -= un;

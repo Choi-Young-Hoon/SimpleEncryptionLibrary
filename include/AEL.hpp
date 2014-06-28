@@ -86,17 +86,30 @@ namespace ael
 		bool operator>=(LargeInt const& a);
 
 		LargeInt& operator=(LargeInt const& a);
+		
 		void operator+=(LargeInt const& a);
 		LargeInt& operator+(LargeInt const& a);
+		
 		void operator-=(LargeInt const& a);
 		LargeInt& operator-(LargeInt const& a);
+		
 		void operator*=(LargeInt const& a);
 		LargeInt& operator*(LargeInt const& a);
+		
 		void operator%=(LargeInt const& a);
 		LargeInt& operator%(LargeInt const& a);
 
 	private:
 		std::vector<unsigned int> nombre;
+	};
+	class Algo
+	{
+	public:
+		static LargeInt BitGenerator(unsigned int lenght);
+		
+		static bool FermatPrimality(LargeInt& b);
+		static LargeInt EuclideAlgoPGCD(LargeInt& a, LargeInt& b);
+		static bool MillerRabinPrimality(LargeInt& n0, unsigned int iterations);
 	};
 }
 
