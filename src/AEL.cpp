@@ -38,189 +38,91 @@
 
 std::string ael::AES::Encrypt(std::string plaintext, std::string key, int keybits)
 {
-	int continuer = 1, tourning = 1, sup = 0;
-	std::string keyd, results;
-	keyd = key.substr(0,16);
+	int tailletext = plaintext.length();
 
-	int continuer2 = 1, tour = 0;
-	if(keyd[0] != 0 && keyd[1] != 0 && keyd[2] != 0){
+    unsigned char text[16] = {0};
 
-		char key1[32] = {0};
+    for(unsigned int i = 0; i < 16; i++){
+        if(i < tailletext){
+            text[i] = plaintext[i];
+        }
+        else{
+            text[i] = 0;
+        }
+    }
 
-		int taillekey = keyd.length(), tailletext = plaintext.length();
+    const unsigned char plaintextt[16] = {text[0],text[1],text[2],text[3],text[4],text[5],text[6],text[7],text[8],text[9],text[10],text[11],text[12],text[13],text[14],text[15]};
+    unsigned char finale[16] = {0};
 
-		while(continuer2){
-			if(tour < taillekey && tour < (keybits / 8)){
-				key1[tour] = keyd[tour];
-			}
-			else{
-				continuer2 = 0;
-			}
-			tour++;
-		}
+    if(keybits == 128){
+        const unsigned char keyy[16] = {key[0],key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15]};
+        unsigned long rk[44] = {0};
+        AESBEncrypt(rk, keyy, 128);
+        AESEncrypt(rk, 10, plaintextt, finale);
+    }
+    else if(keybits == 192){
+        const unsigned char keyy[24] = {key[0],key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15],key[16],key[17],key[18],key[19],key[20],key[21],key[22],key[23]};
+        unsigned long rk[52] = {0};
+        AESBEncrypt(rk, keyy, 192);
+        AESEncrypt(rk, 12, plaintextt, finale);
+    }
+    else if(keybits == 256){
+        const unsigned char keyy[32] = {key[0],key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15],key[16],key[17],key[18],key[19],key[20],key[21],key[22],key[23],key[24],key[25],key[26],key[27],key[28],key[29],key[30],key[31]};
+        unsigned long rk[60] = {0};
+        AESBEncrypt(rk, keyy, 256);
+        AESEncrypt(rk, 14, plaintextt, finale);
+    }
+    else{
+        return("invalid size");
+    }
 
-		continuer2 = 1;
-		tour = 0;
+    std::string str;
 
-		char text[16] = {0};
+    str.clear();
 
-		while(continuer2){
-			if(tour < tailletext && tour < 16){
-				text[tour] = plaintext[tour];
-			}
-			else if(tour < 16){
-				text[tour] = NULL;
-			}
-			else{
-				continuer2 = 0;
-			}
-			tour++;
-		}
+    for(unsigned int j = 0; j < 16; j++){
+        str += finale[j];
+    }
 
-		const unsigned char plaintextt[16] = {text[0],text[1],text[2],text[3],text[4],text[5],text[6],text[7],text[8],text[9],text[10],text[11],text[12],text[13],text[14],text[15]};
-		unsigned char finale[16] = {0};
-
-		if(keybits == 128){
-			const unsigned char key2[16] = {key1[0],key1[1],key1[2],key1[3],key1[4],key1[5],key1[6],key1[7],key1[8],key1[9],key1[10],key1[11],key1[12],key1[13],key1[14],key1[15]};
-			unsigned long rk[44] = {0};
-			AESBEncrypt(rk, key2, 128);
-			AESEncrypt(rk, 10, plaintextt, finale);
-		}
-		else if(keybits == 192){
-			const unsigned char keyy[24] = {key[0],key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15],key[16],key[17],key[18],key[19],key[20],key[21],key[22],key[23]};
-			unsigned long rk[52] = {0};
-			AESBEncrypt(rk, keyy, 192);
-			AESEncrypt(rk, 12, plaintextt, finale);
-		}
-		else if(keybits == 256){
-			const unsigned char keyy[32] = {key[0],key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15],key[16],key[17],key[18],key[19],key[20],key[21],key[22],key[23],key[24],key[25],key[26],key[27],key[28],key[29],key[30],key[31]};
-			unsigned long rk[60] = {0};
-			AESBEncrypt(rk, keyy, 256);
-			AESEncrypt(rk, 14, plaintextt, finale);
-		}
-		else{
-			return("invalid size");
-		}
-
-		std::string str;
-
-		str.clear();
-
-		str += finale[0];
-		str += finale[1];
-		str += finale[2];
-		str += finale[3];
-		str += finale[4];
-		str += finale[5];
-		str += finale[6];
-		str += finale[7];
-		str += finale[8];
-		str += finale[9];
-		str += finale[10];
-		str += finale[11];
-		str += finale[12];
-		str += finale[13];
-		str += finale[14];
-		str += finale[15];
-
-		return(str);
-
-	}
-	else{
-		return("empty");
-	}
+    return(str);
 }
 
 std::string ael::AES::Decrypt(std::string text, std::string key, int keybits)
 {
-	int continuer = 1, tour = 0;
-	if(key[0] != 0 && key[1] != 0 && key[2] != 0){
+    const unsigned char ciphertextt[16] = {text[0],text[1],text[2],text[3],text[4],text[5],text[6],text[7],text[8],text[9],text[10],text[11],text[12],text[13],text[14],text[15]};
+    unsigned char finale[16] = {0};
 
-		char key1[32] = {0};
+    if(keybits == 128){
+        const unsigned char key2[16] = {key[0],key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15]};
+        unsigned long rk[44] = {0};
+        AESBDecrypt(rk, key2, 128);
+        AESDecrypt(rk, 10, ciphertextt, finale);
+    }
+    else if(keybits == 192){
+        const unsigned char key2[24] = {key[0],key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15],key[16],key[17],key[18],key[19],key[20],key[21],key[22],key[23]};
+        unsigned long rk[52] = {0};
+        AESBDecrypt(rk, key2, 192);
+        AESDecrypt(rk, 12, ciphertextt, finale);
+    }
+    else if(keybits == 256){
+        const unsigned char key2[32] = {key[0],key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15],key[16],key[17],key[18],key[19],key[20],key[21],key[22],key[23],key[24],key[25],key[26],key[27],key[28],key[29],key[30],key[31]};
+        unsigned long rk[60] = {0};
+        AESBDecrypt(rk, key2, 256);
+        AESDecrypt(rk, 14, ciphertextt, finale);
+    }
+    else{
+        return("invalid size");
+    }
 
-		int sizekey = key.length();
+    std::string str;
 
-		while(continuer){
-			if(tour < sizekey && tour < (keybits / 8)){
-				key1[tour] = key[tour];
-			}
-			/*else if(tour < (keybits / 8)){
-				key1[tour] = 32;
-			}*/
-			else{
-				continuer = 0;
-			}
-			tour++;
-		}
+    str.clear();
 
-		const unsigned char ciphertextt[16] = {text[0],text[1],text[2],text[3],text[4],text[5],text[6],text[7],text[8],text[9],text[10],text[11],text[12],text[13],text[14],text[15]};
-		unsigned char finale[16] = {0};
+    for(unsigned int j = 0; j < 16; j++){
+        str += finale[j];
+    }
 
-		if(keybits == 128){
-			const unsigned char key2[16] = {key1[0],key1[1],key1[2],key1[3],key1[4],key1[5],key1[6],key1[7],key1[8],key1[9],key1[10],key1[11],key1[12],key1[13],key1[14],key1[15]};
-			unsigned long rk[44] = {0};
-			AESBDecrypt(rk, key2, 128);
-			AESDecrypt(rk, 10, ciphertextt, finale);
-		}
-		else if(keybits == 192){
-			const unsigned char key2[24] = {key[0],key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15],key[16],key[17],key[18],key[19],key[20],key[21],key[22],key[23]};
-			unsigned long rk[52] = {0};
-			AESBDecrypt(rk, key2, 192);
-			AESDecrypt(rk, 12, ciphertextt, finale);
-		}
-		else if(keybits == 256){
-			const unsigned char key2[32] = {key[0],key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15],key[16],key[17],key[18],key[19],key[20],key[21],key[22],key[23],key[24],key[25],key[26],key[27],key[28],key[29],key[30],key[31]};
-			unsigned long rk[60] = {0};
-			AESBDecrypt(rk, key2, 256);
-			AESDecrypt(rk, 14, ciphertextt, finale);
-		}
-		else{
-			return("invalid size");
-		}
-
-		std::string str;
-
-		str.clear();
-
-		if(finale[0] != NULL)
-			str += finale[0];
-		if(finale[1] != NULL)
-			str += finale[1];
-		if(finale[2] != NULL)
-			str += finale[2];
-		if(finale[3] != NULL)
-			str += finale[3];
-		if(finale[4] != NULL)
-			str += finale[4];
-		if(finale[5] != NULL)
-			str += finale[5];
-		if(finale[6] != NULL)
-			str += finale[6];
-		if(finale[7] != NULL)
-			str += finale[7];
-		if(finale[8] != NULL)
-			str += finale[8];
-		if(finale[9] != NULL)
-			str += finale[9];
-		if(finale[10] != NULL)
-			str += finale[10];
-		if(finale[11] != NULL)
-			str += finale[11];
-		if(finale[12] != NULL)
-			str += finale[12];
-		if(finale[13] != NULL)
-			str += finale[13];
-		if(finale[14] != NULL)
-			str += finale[14];
-		if(finale[15] != NULL)
-			str += finale[15];
-
-		return(str);
-
-	}
-	else{
-		return("empty");
-	}
+    return(str);
 }
 
 std::string ael::AES::GenerateKey(int keybits)
