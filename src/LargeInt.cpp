@@ -34,14 +34,14 @@ ael::LargeInt::LargeInt(){
 }
 
 //String to LargeInt
-ael::LargeInt::LargeInt(std::string a){
-    unsigned int taille = ceil(a.size() / 4.0), h = 0;
+ael::LargeInt::LargeInt(unsigned char a[], unsigned int size){
+    unsigned int taille = ceil(size / 4.0), h = 0;
     nombre.resize(taille);
     for(unsigned int i = 0; i < taille; i++){
         nombre[i] = 0;
 		for(unsigned int j = 0; j < 4; j++){
 			h = i*4 + j;
-			if(h < a.size()){
+			if(h < size){
 				h = a[i*4+j];
 				h <<= (j*8);
 				nombre[i] += h;

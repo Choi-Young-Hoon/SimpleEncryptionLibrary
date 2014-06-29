@@ -62,7 +62,7 @@ namespace ael
 
 	public:
 		LargeInt();
-		LargeInt(std::string a);
+		LargeInt(unsigned char a[], unsigned int size);
 		LargeInt(LargeInt const& a);
 		LargeInt(unsigned int a);
 		~LargeInt();
