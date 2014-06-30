@@ -1,5 +1,5 @@
-AdvancedEncryptionLibrary
-=========================
+Advanced Encryption Library
+===========================
 
 What is it ?
 ------------
@@ -22,6 +22,11 @@ Configuring
 
 Depending on you IDE you have to link the library built, with your project. If you compile the shared Library
 you should copy the DLL built at the same time, to the executable directory.
+
+How to use it ?
+---------------
+
+All instructions are in the doc directory.
 
 License (LGPL)
 --------------

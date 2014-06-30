@@ -73,8 +73,8 @@ namespace ael
 		void Modular_Exp(LargeInt& exposant, LargeInt& modulo);
 		void NumberGenerator(LargeInt& maxi, LargeInt& mini);
 
-		void Decalage_Droite();
-		void Decalage_Gauche();
+		void ToTheRight();
+		void ToTheLeft();
 		void Generer(unsigned int taille);
 		unsigned int GetFirst();
 

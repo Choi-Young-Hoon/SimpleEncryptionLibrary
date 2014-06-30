@@ -78,7 +78,7 @@ const void ael::LargeInt::Show(){
 }
 
 //Move to the right all the bits of the LargeInt
-void ael::LargeInt::Decalage_Droite(){
+void ael::LargeInt::ToTheRight(){
     unsigned int buffer = 0;
     for(signed int i = (nombre.size() - 1); i >= 0; i--){
         if((nombre[i]&1)>0){
@@ -100,7 +100,7 @@ void ael::LargeInt::Decalage_Droite(){
 }
 
 //Move to the left all the bits of the LargeInt
-void ael::LargeInt::Decalage_Gauche(){
+void ael::LargeInt::ToTheLeft(){
     unsigned int buffer = 0;
     for(unsigned int i = 0; i < nombre.size(); i++){
         if((nombre[i]&0x80000000)>0){
@@ -143,7 +143,7 @@ void ael::LargeInt::NumberGenerator(LargeInt& maxi, LargeInt& mini){
     unsigned int integerlenght = 0, extrasize = 1, filter = 0, random = 0;
     bool start = true;
     srand(time(NULL));
-    //std::cout << "Hey : " << integerlenght << std::endl;
+
     if(maxi.nombre.size() == mini.nombre.size()){
         integerlenght = maxi.nombre.size();
     }
@@ -155,7 +155,6 @@ void ael::LargeInt::NumberGenerator(LargeInt& maxi, LargeInt& mini){
     //if(maxi.nombre[maxi.nombre.size()-1] > 0x)
     while(extrasize < maxi.nombre[maxi.nombre.size()-1]){
         extrasize <<= 1;
-        //std::cout << "Hey : " << extrasize << std::endl;
         if(extrasize == 0){
             //extrasize = 0xFFFFFFFF;
             break;
@@ -185,8 +184,6 @@ void ael::LargeInt::NumberGenerator(LargeInt& maxi, LargeInt& mini){
             nombre[nombre.size()-1] += (rand() % 0x100);
         }
 
-        //std::cout << filter << std::endl;
-
         if((maxi.nombre.size() == mini.nombre.size()) && (maxi.nombre.size() == integerlenght)){
             nombre[nombre.size()-1] = (((nombre[nombre.size()-1]*nombre[nombre.size()-1]) % (maxi.nombre[maxi.nombre.size()-1] - mini.nombre[mini.nombre.size()-1])) + mini.nombre[mini.nombre.size()-1]);
         }
@@ -194,7 +191,6 @@ void ael::LargeInt::NumberGenerator(LargeInt& maxi, LargeInt& mini){
         if((nombre[nombre.size()-1] == 0) && (nombre.size() > 1)){
             nombre.pop_back();
         }
-        //this->Show();
 
         if(start){
             start = false;
@@ -519,8 +515,8 @@ void ael::LargeInt::MultiplicationRusse(LargeInt const& a, LargeInt const& b){
         if((x.nombre[0] & 1) > 0){
             result += y;
         }
-        x.Decalage_Droite();
-        y.Decalage_Gauche();
+        x.ToTheRight();
+        y.ToTheLeft();
     }
     nombre.swap(result.nombre);
 }
@@ -538,23 +534,23 @@ void ael::LargeInt::operator%=(LargeInt const &a){
 
     while(gamma <= aa){
         n += un;
-        gamma.Decalage_Gauche();
+        gamma.ToTheLeft();
     }
 
     //gamma = zero;
 
     for(LargeInt i(1); i < n; i += un){ //Alpha = 2^(n-1)
-        alpha.Decalage_Gauche();
+        alpha.ToTheLeft();
     }
 
     beta = alpha;
-    beta.Decalage_Gauche(); //Beta = 2^n = 2^(n-1) * 2 = Alpha * 2
+    beta.ToTheLeft(); //Beta = 2^n = 2^(n-1) * 2 = Alpha * 2
 
     for(LargeInt j(0); j < n; j += un){
         gamma = alpha;
         gamma += beta;
 
-        gamma.Decalage_Droite();
+        gamma.ToTheRight();
 
         buffer = gamma;
         buffer *= bb;
@@ -595,6 +591,13 @@ void ael::LargeInt::operator%=(LargeInt const &a){
     }
 }
 
+//Reminder
+ael::LargeInt& ael::LargeInt::operator%(LargeInt const& a){
+    LargeInt& b(*this);
+    b %= a;
+    return b;
+}
+
 //Modular Exponentiation
 void ael::LargeInt::Modular_Exp(LargeInt& exposant, LargeInt& modulo){
     LargeInt result(1), base2(*this), base3(base2), exposant2(exposant), modulo2(modulo), nul(0);
@@ -606,13 +609,11 @@ void ael::LargeInt::Modular_Exp(LargeInt& exposant, LargeInt& modulo){
             result %= modulo2;
 
         }
-        exposant2.Decalage_Droite();
+        exposant2.ToTheRight();
 
-        base2 *= base3;
+        base2 *= base2;
 
         base2 %= modulo2;
-
-        base3 = base2;
     }
 
     nombre.swap(result.nombre);

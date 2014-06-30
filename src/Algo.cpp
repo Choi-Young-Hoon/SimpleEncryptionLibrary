@@ -32,11 +32,11 @@ ael::LargeInt ael::Algo::BitGenerator(unsigned int lenght){
     ael::LargeInt maxi(0x01), mini(0x0), un(0x01), result(0x0);
 
     for(unsigned int k = 0; k < lenght; k++){
-        maxi.Decalage_Gauche();
+        maxi.ToTheLeft();
     }
     mini = maxi;
     
-    mini.Decalage_Droite();
+    mini.ToTheRight();
     
     result.NumberGenerator(maxi, mini);
 
@@ -99,7 +99,7 @@ bool ael::Algo::MillerRabinPrimality(ael::LargeInt& n0, unsigned int iterations)
 
     while(((n2.GetFirst() & 0x01) == 0) && (n2 != zero)){
         s += un;
-        n2.Decalage_Droite();
+        n2.ToTheRight();
     }
 
     if(s == zero){
@@ -111,8 +111,6 @@ bool ael::Algo::MillerRabinPrimality(ael::LargeInt& n0, unsigned int iterations)
     s2 -= un;
 
     a.Generer(1); //Nombre aléatoire
-    //a = un;
-    //a += un;
 
     for(unsigned int k = 0; k < iterations; k += 1){
         a *= plusa;
@@ -143,7 +141,7 @@ bool ael::Algo::MillerRabinPrimality(ael::LargeInt& n0, unsigned int iterations)
         e = d;
         for(ael::LargeInt r(0); r < s; r += un){
             c2 = a;
-            e.Decalage_Gauche();
+            e.ToTheLeft();
             
             c2.Modular_Exp(e, n0);
 
