@@ -37,6 +37,8 @@ file(
 		
 		src/LargeInt.cpp
 		
+		src/MD5.cpp
+		
 		include/AEL.hpp
 
 )

@@ -50,13 +50,6 @@ namespace ael
 		static std::string Decrypt(std::string ciphertext, std::string key, int keybits = 128);
 
 	};
-    /*class HASH
-    {
-    public:
-
-        static std::string MD5(const std::string text);
-
-    };*/
 	class LargeInt
 	{
 
@@ -86,16 +79,16 @@ namespace ael
 		bool operator>=(LargeInt const& a);
 
 		LargeInt& operator=(LargeInt const& a);
-		
+
 		void operator+=(LargeInt const& a);
 		LargeInt& operator+(LargeInt const& a);
-		
+
 		void operator-=(LargeInt const& a);
 		LargeInt& operator-(LargeInt const& a);
-		
+
 		void operator*=(LargeInt const& a);
 		LargeInt& operator*(LargeInt const& a);
-		
+
 		void operator%=(LargeInt const& a);
 		LargeInt& operator%(LargeInt const& a);
 
@@ -106,11 +99,15 @@ namespace ael
 	{
 	public:
 		static LargeInt BitGenerator(unsigned int lenght);
-		
+
 		static bool FermatPrimality(LargeInt& b);
 		static LargeInt EuclideAlgoPGCD(LargeInt& a, LargeInt& b);
 		static bool MillerRabinPrimality(LargeInt& n0, unsigned int iterations);
 	};
+
+	std::vector<unsigned int> MD5(const std::string text);
+
+	std::string Vector_UInt_To_String(std::vector<unsigned int> text);
 }
 
 #endif

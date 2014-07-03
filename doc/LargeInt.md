@@ -9,7 +9,7 @@ LargeInt is a specific class that provide a simple way to manage big numbers.
 You can create a LargeInt like this :
 
     ael::LargeInt numberA, numberB(0x0125BDEF), numberC(numberB);
-    unsigned char numberD = {0x12, 0x52, 0xAB, 0xC2};
+    unsigned char numberD[5] = {0x12, 0x52, 0xAB, 0xC2};
     unsigned int size = 5;
     ael::LargeInt numberE(numberD, size);
     

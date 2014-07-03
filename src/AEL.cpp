@@ -32,7 +32,6 @@
 #include <sstream>
 #include "AEL.hpp"
 #include "AES.hpp"
-//#include "MD5.h"
 
 //Public functions of Advanced Encryption Standard (AES) algorithm.
 
@@ -136,7 +135,13 @@ std::string ael::AES::GenerateKey(int keybits)
 	return key;
 }
 
-/*std::string ael::HASH::MD5(const std::string text){
-    std::string hashs = md5(text);
-    return hashs;
-}*/
+std::string ael::Vector_UInt_To_String(std::vector<unsigned int> text){
+    std::string result = "";
+    for(unsigned int i = 0; i < text.size(); i++){
+        result += (text[i] & 0xFF);
+        result += ((text[i] >>= 8) & 0xFF);
+        result += ((text[i] >>= 16) & 0xFF);
+        result += ((text[i] >>= 24) & 0xFF);
+    }
+    return result;
+}

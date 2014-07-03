@@ -7,6 +7,17 @@ What is it ?
 An Open Source C++ Library that provide a simple way to use encryption of many algorithms like Diffie-Hellman
 key exchange, and the Advanced Encryption Standard (AES), with just a few lines of codes.
 
+Implemented algorithms
+----------------------
+
+* AES-128
+* AES-192
+* AES-256
+* MD5
+* Miller-Rabin primality test
+* Fermat primality test
+* Euclide GCD
+
 Compiling
 ---------
 
