@@ -43,7 +43,7 @@ int main(){
 		//License information
 		std::cout << "This program and all source files of the Advanced Encryption Library are under the Lesser General Public License (LGPL). See COPYING and LESSER.COPYING files which you should have with the source code." << std::endl << std::endl;
 
-		//Test th AES-128Bits algorithm
+		//Test the AES-128Bits algorithm
 		std::cout << "AES 128 Bits : ";
 		std::string key128 = ael::AES::GenerateKey(128);
 		std::string encrypt128 = ael::AES::Encrypt("Test program ...", key128, 128);
@@ -56,7 +56,7 @@ int main(){
 			std::cout << "FAILED" << std::endl;
 		}
 
-		//Test th AES-192Bits algorithm
+		//Test the AES-192Bits algorithm
 		std::cout << "AES 192 Bits : ";
 		std::string key192 = ael::AES::GenerateKey(192);
 		std::string encrypt192 = ael::AES::Encrypt("Test program ...", key192, 192);
@@ -69,13 +69,22 @@ int main(){
 			std::cout << "FAILED" << std::endl;
 		}
 
-		//Test th AES-256Bits algorithm
+		//Test the AES-256Bits algorithm
 		std::cout << "AES 256 Bits : ";
 		std::string key256 = ael::AES::GenerateKey(256);
 		std::string encrypt256 = ael::AES::Encrypt("Test program ...", key256, 256);
 		std::string decrypt256 = ael::AES::Decrypt(encrypt256, key256, 256);
 
 		if(decrypt256 == "Test program ..."){
+			std::cout << "OK" << std::endl;
+		}
+		else{
+			std::cout << "FAILED" << std::endl;
+		}
+
+		//Test the MD5 algorithm
+		std::cout << "MD5 : ";
+		if(ael::Vector_UInt_To_Hex_String(ael::MD5("Hello world !")) == "67c18d060479c5d867c9b91c80edeb4c"){
 			std::cout << "OK" << std::endl;
 		}
 		else{

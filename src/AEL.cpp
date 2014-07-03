@@ -145,3 +145,11 @@ std::string ael::Vector_UInt_To_String(std::vector<unsigned int> text){
     }
     return result;
 }
+
+std::string ael::Vector_UInt_To_Hex_String(std::vector<unsigned int> text){
+    std::ostringstream ss;
+    for(unsigned int i = 0; i < text.size(); i++){
+        ss << std::setfill('0') << std::setw(8) << std::hex << text[i];
+    }
+    return ss.str();
+}

@@ -36,6 +36,7 @@
 #include <math.h>
 #include <vector>
 #include <iomanip>
+#include <sstream>
 
 namespace ael
 {
@@ -108,6 +109,7 @@ namespace ael
 	std::vector<unsigned int> MD5(const std::string text);
 
 	std::string Vector_UInt_To_String(std::vector<unsigned int> text);
+	std::string Vector_UInt_To_Hex_String(std::vector<unsigned int> text);
 }
 
 #endif
