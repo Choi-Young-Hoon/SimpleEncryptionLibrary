@@ -32,7 +32,7 @@ unsigned int md5_rotate_left(unsigned int x, unsigned int n) {
 }
 
 ael::MD5::MD5(const std::string text){
-    //Note: Toutes les variables sont sur 32 bits
+    //Note: All variables are unsigned 32 bit and wrap modulo 2^32 when calculating
     std::vector<unsigned int> message;
     unsigned int lengthMessage[2];
 
@@ -59,7 +59,7 @@ ael::MD5::MD5(const std::string text){
         lengthMessage[1] = 0x00;
     }
 
-    //Définir r comme suit :
+    //r specifies the per-round shift amounts
     unsigned int r[64] = {
         7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
         5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
@@ -83,10 +83,10 @@ ael::MD5::MD5(const std::string text){
         ,0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1
         ,0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391 };
 
-    //Préparation des variables:
+    //Initialize variables
     unsigned int h0 = 0x67452301, h1 = 0xefcdab89, h2 = 0x98badcfe, h3 = 0x10325476;
 
-    //Preparation du message (padding) :
+    //Pre-processing: adding a single 1 bit
     unsigned int test = 0x80, mes = 0xff;
     while((mes & message[message.size()-1]) != 0){
         test <<= 8;
@@ -100,6 +100,7 @@ ael::MD5::MD5(const std::string text){
         message[message.size()-1] = (message[message.size()-1] | test);
     }
 
+    //Pre-processing: padding with zeros
     while((message.size() % 16) != 14){
         message.push_back(0x00);
     }
@@ -110,20 +111,20 @@ ael::MD5::MD5(const std::string text){
 
     unsigned int a, b, c, d, f, temp, g = 0, w[16];
 
-    //Découpage en blocs de 512 bits:
+    //Process the message in successive 512-bit chunks
     for(unsigned int j = 0; j < (message.size() / 16); j++){
 
         for(unsigned int m = 0; m < 16; m++){
             w[m] = message[m+j*16];
         }
 
-        //initialiser les valeurs de hachage:
+        //Initialize hash value for this chunk
         a = h0;
         b = h1;
         c = h2;
         d = h3;
 
-        //Boucle principale:
+        //Main loop
         for(unsigned int l = 0; l < 64; l++){
             if((l >= 0) && (l <= 15)){
                 f = ((b & c) | ((~b) & d)); //Round 1
@@ -150,13 +151,11 @@ ael::MD5::MD5(const std::string text){
 
         }
 
-         //ajouter le résultat au bloc précédent:
+         //Add result to precedent block
          h0 = h0 + a;
          h1 = h1 + b;
          h2 = h2 + c;
          h3 = h3 + d;
-
-         //std::cout << std::hex << w[0] << std::endl;
 
     }
 
