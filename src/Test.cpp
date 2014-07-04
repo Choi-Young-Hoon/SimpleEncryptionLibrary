@@ -1,4 +1,31 @@
-#include <iostream>
+/* ****************************************************************************
+ *
+ * Copyright 2013, 2014 informaticien77
+ *
+ * This file is part of Advanced Encryption Library.
+ *
+ * Advanced Encryption Library is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Advanced Encryption Library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Advanced Encryption Library.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * 				Test.cpp
+ *
+ * Author: informaticien77
+ * Release date: 28th of June 2014
+ *
+ * ****************************************************************************
+ */
+
+
 #include "AEL.hpp"
 
 bool TestDiffieHellman(void){
@@ -45,9 +72,10 @@ int main(){
 
 		//Test the AES-128Bits algorithm
 		std::cout << "AES 128 Bits : ";
-		std::string key128 = ael::AES::GenerateKey(128);
-		std::string encrypt128 = ael::AES::Encrypt("Test program ...", key128, 128);
-		std::string decrypt128 = ael::AES::Decrypt(encrypt128, key128, 128);
+		ael::AES key_aes_128;
+		key_aes_128.GenerateKey(128);
+		std::string encrypt128 = key_aes_128.Encrypt("Test program ...");
+		std::string decrypt128 = key_aes_128.Decrypt(encrypt128);
 
 		if(decrypt128 == "Test program ..."){
 			std::cout << "OK" << std::endl;
@@ -58,9 +86,10 @@ int main(){
 
 		//Test the AES-192Bits algorithm
 		std::cout << "AES 192 Bits : ";
-		std::string key192 = ael::AES::GenerateKey(192);
-		std::string encrypt192 = ael::AES::Encrypt("Test program ...", key192, 192);
-		std::string decrypt192 = ael::AES::Decrypt(encrypt192, key192, 192);
+		ael::AES key_aes_192;
+		key_aes_192.GenerateKey(192);
+		std::string encrypt192 = key_aes_192.Encrypt("Test program ...");
+		std::string decrypt192 = key_aes_192.Decrypt(encrypt192);
 
 		if(decrypt192 == "Test program ..."){
 			std::cout << "OK" << std::endl;
@@ -71,9 +100,10 @@ int main(){
 
 		//Test the AES-256Bits algorithm
 		std::cout << "AES 256 Bits : ";
-		std::string key256 = ael::AES::GenerateKey(256);
-		std::string encrypt256 = ael::AES::Encrypt("Test program ...", key256, 256);
-		std::string decrypt256 = ael::AES::Decrypt(encrypt256, key256, 256);
+		ael::AES key_aes_256;
+		key_aes_256.GenerateKey(256);
+		std::string encrypt256 = key_aes_256.Encrypt("Test program ...");
+		std::string decrypt256 = key_aes_256.Decrypt(encrypt256);
 
 		if(decrypt256 == "Test program ..."){
 			std::cout << "OK" << std::endl;

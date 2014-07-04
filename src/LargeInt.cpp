@@ -33,11 +33,18 @@ ael::LargeInt::LargeInt(){
     nombre.clear();
 }
 
+//Vector of unsigned int to LargeInt
 ael::LargeInt::LargeInt(std::vector<unsigned int> a){
     nombre = a;
 }
 
 //String to LargeInt
+ael::LargeInt::LargeInt(std::string a){
+    ael::LargeInt b((unsigned char *)a.c_str(), a.size());
+    nombre.swap(b.nombre);
+}
+
+//Char to LargeInt
 ael::LargeInt::LargeInt(unsigned char a[], unsigned int size){
     unsigned int taille = ceil(size / 4.0), h = 0;
     nombre.resize(taille);

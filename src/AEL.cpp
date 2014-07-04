@@ -25,113 +25,135 @@
  * ****************************************************************************
  */
 
-#include <cstdlib>
-#include <iostream>
-#include <ctime>
-#include <string>
-#include <sstream>
 #include "AEL.hpp"
-#include "AES.hpp"
 
-//Public functions of Advanced Encryption Standard (AES) algorithm.
+//Number generator with specified bit-length
+ael::LargeInt ael::Algo::BitGenerator(unsigned int lenght){
+    ael::LargeInt maxi(0x01), mini(0x0), un(0x01), result(0x0);
 
-std::string ael::AES::Encrypt(std::string plaintext, std::string key, int keybits)
-{
-	int tailletext = plaintext.length();
+    for(unsigned int k = 0; k < lenght; k++){
+        maxi.ToTheLeft();
+    }
+    mini = maxi;
 
-    unsigned char text[16] = {0};
+    mini.ToTheRight();
 
-    for(unsigned int i = 0; i < 16; i++){
-        if(i < tailletext){
-            text[i] = plaintext[i];
+    result.NumberGenerator(maxi, mini);
+
+    return result;
+}
+
+//Fermat Primality Test
+bool ael::Algo::FermatPrimality(ael::LargeInt& b){
+    ael::LargeInt bb(b), un(1), p(bb), deux(2), trois(3), cinq(5), sept(7);
+    p -= un;
+
+    deux.Modular_Exp(p, bb);
+    if(deux != un){
+        return false;
+    }
+
+    trois.Modular_Exp(p, bb);
+    if(trois != un){
+        return false;
+    }
+
+    cinq.Modular_Exp(p, bb);
+    if(cinq != un){
+        return false;
+    }
+
+    sept.Modular_Exp(p, bb);
+    if(sept != un){
+        return false;
+    }
+
+    return true;
+}
+
+//Euclide Algorithm to calculate PGCD
+ael::LargeInt ael::Algo::EuclideAlgoPGCD(ael::LargeInt& a, ael::LargeInt& b){
+    ael::LargeInt reste(1), aa(a), bb(b), zero(0), un(1);
+    while(reste != zero){
+        reste = aa;
+        reste %= bb;
+
+        if(reste == zero){
+            break;
         }
         else{
-            text[i] = 0;
+            aa = bb;
+            bb = reste;
+        }
+
+    }
+    return bb;
+}
+
+//Miller-Rabin Primality Test
+bool ael::Algo::MillerRabinPrimality(ael::LargeInt& n0, unsigned int iterations){
+    ael::LargeInt n1(n0), un(1), n2(0), s(0), d(0), a(0), c1(0), c2(0), r(0), s2(0), e(0), zero(0), plusa(0xFFFFF), deux(2), b(0);
+    bool status = false;
+    n1 -= un;
+    n2 = n1;
+
+    while(((n2.GetFirst() & 0x01) == 0) && (n2 != zero)){
+        s += un;
+        n2.ToTheRight();
+    }
+
+    if(s == zero){
+        return false;
+    }
+
+    d = n2;
+    s2 = s;
+    s2 -= un;
+
+    a.Generer(1); //Nombre aléatoire
+
+    for(unsigned int k = 0; k < iterations; k += 1){
+        a *= plusa;
+        a %= n0;
+        a += deux;
+        //a %= n0;
+
+        /*while(EuclideAlgoPGCD(a, n0) != un){
+            a *= plusa;
+            a %= n0;
+            a += deux;
+            a %= n0;
+            //plusa += 3;
+        }*/
+
+        a.Show();
+        c1 = a;
+        c1.Modular_Exp(d, n0);
+
+        if(c1 == un){
+            status = true;
+            break;
+        }
+        else{
+            status = false;
+        }
+
+        e = d;
+        for(ael::LargeInt r(0); r < s; r += un){
+            c2 = a;
+            e.ToTheLeft();
+
+            c2.Modular_Exp(e, n0);
+
+            if(c2 == n1){
+                status = true;
+                break;
+            }
+        }
+
+        if(status == true){
+            break;
         }
     }
-
-    const unsigned char plaintextt[16] = {text[0],text[1],text[2],text[3],text[4],text[5],text[6],text[7],text[8],text[9],text[10],text[11],text[12],text[13],text[14],text[15]};
-    unsigned char finale[16] = {0};
-
-    if(keybits == 128){
-        const unsigned char keyy[16] = {key[0],key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15]};
-        unsigned long rk[44] = {0};
-        AESBEncrypt(rk, keyy, 128);
-        AESEncrypt(rk, 10, plaintextt, finale);
-    }
-    else if(keybits == 192){
-        const unsigned char keyy[24] = {key[0],key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15],key[16],key[17],key[18],key[19],key[20],key[21],key[22],key[23]};
-        unsigned long rk[52] = {0};
-        AESBEncrypt(rk, keyy, 192);
-        AESEncrypt(rk, 12, plaintextt, finale);
-    }
-    else if(keybits == 256){
-        const unsigned char keyy[32] = {key[0],key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15],key[16],key[17],key[18],key[19],key[20],key[21],key[22],key[23],key[24],key[25],key[26],key[27],key[28],key[29],key[30],key[31]};
-        unsigned long rk[60] = {0};
-        AESBEncrypt(rk, keyy, 256);
-        AESEncrypt(rk, 14, plaintextt, finale);
-    }
-    else{
-        return("invalid size");
-    }
-
-    std::string str;
-
-    str.clear();
-
-    for(unsigned int j = 0; j < 16; j++){
-        str += finale[j];
-    }
-
-    return(str);
+    return status;
 }
-
-std::string ael::AES::Decrypt(std::string text, std::string key, int keybits)
-{
-    const unsigned char ciphertextt[16] = {text[0],text[1],text[2],text[3],text[4],text[5],text[6],text[7],text[8],text[9],text[10],text[11],text[12],text[13],text[14],text[15]};
-    unsigned char finale[16] = {0};
-
-    if(keybits == 128){
-        const unsigned char key2[16] = {key[0],key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15]};
-        unsigned long rk[44] = {0};
-        AESBDecrypt(rk, key2, 128);
-        AESDecrypt(rk, 10, ciphertextt, finale);
-    }
-    else if(keybits == 192){
-        const unsigned char key2[24] = {key[0],key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15],key[16],key[17],key[18],key[19],key[20],key[21],key[22],key[23]};
-        unsigned long rk[52] = {0};
-        AESBDecrypt(rk, key2, 192);
-        AESDecrypt(rk, 12, ciphertextt, finale);
-    }
-    else if(keybits == 256){
-        const unsigned char key2[32] = {key[0],key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15],key[16],key[17],key[18],key[19],key[20],key[21],key[22],key[23],key[24],key[25],key[26],key[27],key[28],key[29],key[30],key[31]};
-        unsigned long rk[60] = {0};
-        AESBDecrypt(rk, key2, 256);
-        AESDecrypt(rk, 14, ciphertextt, finale);
-    }
-    else{
-        return("invalid size");
-    }
-
-    std::string str;
-
-    str.clear();
-
-    for(unsigned int j = 0; j < 16; j++){
-        str += finale[j];
-    }
-
-    return(str);
-}
-
-std::string ael::AES::GenerateKey(int keybits)
-{
-	std::srand(time(NULL));
-	std::string key;
-	int i = 0;
-	for(i = 0; i < (keybits/8); i++){
-		key += std::rand()%255;
-	}
-	return key;
-}
-

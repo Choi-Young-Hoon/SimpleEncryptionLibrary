@@ -33,7 +33,7 @@ file(
 		
 		src/AES.hpp
 		
-		src/Algo.cpp
+		src/AES.cpp
 		
 		src/LargeInt.cpp
 		

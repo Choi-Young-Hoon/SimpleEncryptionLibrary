@@ -33,6 +33,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <cstring>
 #include <math.h>
 #include <vector>
 #include <iomanip>
@@ -43,12 +44,16 @@ namespace ael
 	class AES
 	{
 	public:
+	    AES();
+	    AES(std::string key);
 
-		static std::string GenerateKey(int keybits = 128);
+		void GenerateKey(int keybits = 128);
 
-		static std::string Encrypt(std::string plaintext, std::string key, int keybits = 128);
+		std::string Encrypt(std::string plaintext);
+		std::string Decrypt(std::string ciphertext);
 
-		static std::string Decrypt(std::string ciphertext, std::string key, int keybits = 128);
+    private:
+        std::string aes_key;
 
 	};
 	class LargeInt
@@ -57,6 +62,7 @@ namespace ael
 	public:
 		LargeInt();
 		LargeInt(std::vector<unsigned int> a);
+		LargeInt(std::string a);
 		LargeInt(unsigned char a[], unsigned int size);
 		LargeInt(LargeInt const& a);
 		LargeInt(unsigned int a);
@@ -110,6 +116,7 @@ namespace ael
 	{
     public:
         MD5(const std::string text);
+
         std::string asString(void);
         std::string asHexString(void);
         std::vector<unsigned int> asVector(void);
