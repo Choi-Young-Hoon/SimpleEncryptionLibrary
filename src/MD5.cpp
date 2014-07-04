@@ -31,7 +31,7 @@ unsigned int md5_rotate_left(unsigned int x, unsigned int n) {
   return ((x << n) | (x >> (32-n)));
 }
 
-std::vector<unsigned int> ael::MD5(const std::string text){
+ael::MD5::MD5(const std::string text){
     //Note: Toutes les variables sont sur 32 bits
     std::vector<unsigned int> message;
     unsigned int lengthMessage[2];
@@ -181,36 +181,36 @@ std::vector<unsigned int> ael::MD5(const std::string text){
                     ((h3>>8)&0xff00) | // move byte 2 to byte 1
                     ((h3<<24)&0xff000000); // byte 0 to byte 3
 
-    /*std::string result = "";
+    text_digest.resize(4);
 
-    result += (digest[0] & 0xFF);
-    result += ((digest[0] >>= 8) & 0xFF);
-    result += ((digest[0] >>= 16) & 0xFF);
-    result += ((digest[0] >>= 24) & 0xFF);
+    text_digest[0] = digest[0];
+    text_digest[1] = digest[1];
+    text_digest[2] = digest[2];
+    text_digest[3] = digest[3];
 
-    result += (digest[1] & 0xFF);
-    result += ((digest[1] >>= 8) & 0xFF);
-    result += ((digest[1] >>= 16) & 0xFF);
-    result += ((digest[1] >>= 24) & 0xFF);
+}
 
-    result += (digest[2] & 0xFF);
-    result += ((digest[2] >>= 8) & 0xFF);
-    result += ((digest[2] >>= 16) & 0xFF);
-    result += ((digest[2] >>= 24) & 0xFF);
+std::string ael::MD5::asString(){
+    std::string result = "";
+    for(unsigned int i = 0; i < text_digest.size(); i++){
+        result += (text_digest[i] & 0xFF);
+        result += ((text_digest[i] >>= 8) & 0xFF);
+        result += ((text_digest[i] >>= 16) & 0xFF);
+        result += ((text_digest[i] >>= 24) & 0xFF);
+    }
+    return result;
+}
 
-    result += (digest[3] & 0xFF);
-    result += ((digest[3] >>= 8) & 0xFF);
-    result += ((digest[3] >>= 16) & 0xFF);
-    result += ((digest[3] >>= 24) & 0xFF);*/
+std::string ael::MD5::asHexString(){
+    std::ostringstream ss;
+    for(unsigned int i = 0; i < text_digest.size(); i++){
+        ss << std::setfill('0') << std::setw(8) << std::hex << text_digest[i];
+    }
+    return ss.str();
+}
 
+std::vector<unsigned int> ael::MD5::asVector(){
     std::vector<unsigned int> result;
-
-    result.resize(4);
-
-    result[0] = digest[0];
-    result[1] = digest[1];
-    result[2] = digest[2];
-    result[3] = digest[3];
-
+    result = text_digest;
     return result;
 }

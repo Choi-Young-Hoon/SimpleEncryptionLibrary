@@ -56,6 +56,7 @@ namespace ael
 
 	public:
 		LargeInt();
+		LargeInt(std::vector<unsigned int> a);
 		LargeInt(unsigned char a[], unsigned int size);
 		LargeInt(LargeInt const& a);
 		LargeInt(unsigned int a);
@@ -105,11 +106,16 @@ namespace ael
 		static LargeInt EuclideAlgoPGCD(LargeInt& a, LargeInt& b);
 		static bool MillerRabinPrimality(LargeInt& n0, unsigned int iterations);
 	};
-
-	std::vector<unsigned int> MD5(const std::string text);
-
-	std::string Vector_UInt_To_String(std::vector<unsigned int> text);
-	std::string Vector_UInt_To_Hex_String(std::vector<unsigned int> text);
+	class MD5
+	{
+    public:
+        MD5(const std::string text);
+        std::string asString(void);
+        std::string asHexString(void);
+        std::vector<unsigned int> asVector(void);
+    private:
+        std::vector<unsigned int> text_digest;
+	};
 }
 
 #endif

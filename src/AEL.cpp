@@ -135,21 +135,3 @@ std::string ael::AES::GenerateKey(int keybits)
 	return key;
 }
 
-std::string ael::Vector_UInt_To_String(std::vector<unsigned int> text){
-    std::string result = "";
-    for(unsigned int i = 0; i < text.size(); i++){
-        result += (text[i] & 0xFF);
-        result += ((text[i] >>= 8) & 0xFF);
-        result += ((text[i] >>= 16) & 0xFF);
-        result += ((text[i] >>= 24) & 0xFF);
-    }
-    return result;
-}
-
-std::string ael::Vector_UInt_To_Hex_String(std::vector<unsigned int> text){
-    std::ostringstream ss;
-    for(unsigned int i = 0; i < text.size(); i++){
-        ss << std::setfill('0') << std::setw(8) << std::hex << text[i];
-    }
-    return ss.str();
-}

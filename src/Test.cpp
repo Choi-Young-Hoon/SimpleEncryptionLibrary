@@ -84,7 +84,8 @@ int main(){
 
 		//Test the MD5 algorithm
 		std::cout << "MD5 : ";
-		if(ael::Vector_UInt_To_Hex_String(ael::MD5("Hello world !")) == "67c18d060479c5d867c9b91c80edeb4c"){
+		ael::MD5 md5("Hello world !");
+		if(md5.asHexString() == "67c18d060479c5d867c9b91c80edeb4c"){
 			std::cout << "OK" << std::endl;
 		}
 		else{
@@ -100,6 +101,7 @@ int main(){
 		else{
 			std::cout << "FAILED" << std::endl;
 		}
+
 		std::cout << "Press a touch to quit ..." << std::endl;
 		std::getchar();
 
