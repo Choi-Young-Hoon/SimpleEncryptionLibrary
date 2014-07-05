@@ -80,6 +80,72 @@ ael::LargeInt::~LargeInt(){
 
 }
 
+//Convert LargeInt to a 64 type string
+std::string ael::LargeInt::as64String(){
+    unsigned int asize = (nombre.size()*4);
+    unsigned char a[asize];
+
+    for(unsigned int i = 0; i < nombre.size(); i++){
+        a[i*4] = (nombre[i] & 0xFF);
+        a[i*4+1] = ((nombre[i] >> 8) & 0xFF);
+        a[i*4+2] = ((nombre[i] >> 16) & 0xFF);
+        a[i*4+3] = ((nombre[i] >> 24) & 0xFF);
+    }
+
+    unsigned int bsize = ceil(4.0/3.0*asize);
+    unsigned char b[bsize];
+
+    for(unsigned int j = 0; j < floor(bsize/3.0); j++){
+        b[j*4] = ((a[j*3] & 0xFC) >> 2);
+        b[j*4+1] = ((a[j*3] & 0x03) << 4) | ((a[j*3+1] & 0xF0) >> 4);
+        b[j*4+2] = ((a[j*3+1] & 0x0F) << 2) | ((a[j*3+2] & 0xC0) >> 6);
+        b[j*4+3] = (a[j*3+2] & 0x3F);
+    }
+
+    unsigned int complement = 0;
+
+    if(floor(4.0/3.0*asize) != ceil(4.0/3.0*asize)){
+        unsigned int dsize = (asize % 3);
+
+        if(dsize == 1){
+            b[bsize-2] = ((a[asize-1] & 0xFC) >> 2);
+            b[bsize-1] = ((a[asize-1] & 0x03) << 4);
+            complement = 2;
+        }
+        else if(dsize == 2){
+            b[bsize-3] = ((a[asize-2] & 0xFC) >> 2);
+            b[bsize-2] = ((a[asize-2] & 0x03) << 4) | ((a[asize-1] & 0xF0) >> 4);
+            b[bsize-1] = ((a[asize-1] & 0x0F) << 2);
+            complement = 1;
+        }
+    }
+
+    unsigned char c[65] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+    'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+    'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+    'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
+    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+    'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+    'w', 'x', 'y', 'z', '0', '1', '2', '3',
+    '4', '5', '6', '7', '8', '9', '+', '/', '='};
+
+    std::string d;
+
+    for(unsigned int k = 0; k < bsize; k++){
+        d += c[(b[k])];
+    }
+
+    if(complement == 1){
+        d += c[64];
+    }
+    else if(complement == 2){
+        d += c[64];
+        d += c[64];
+    }
+
+    return d;
+}
+
 //Show the LargeInt value in the console
 const void ael::LargeInt::Show(){
     for(int i = nombre.size() - 1; i >= 0; i--){

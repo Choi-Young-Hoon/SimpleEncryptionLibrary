@@ -69,6 +69,7 @@ namespace ael
 		~LargeInt();
 
 		const void Show();
+		std::string as64String();
 
 		void MultiplicationRusse(LargeInt const& a, LargeInt const& b);
 		void Modular_Exp(LargeInt& exposant, LargeInt& modulo);

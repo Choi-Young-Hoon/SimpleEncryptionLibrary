@@ -4,18 +4,19 @@ Advanced Encryption Library
 AES
 ---
 
-You can use the Advanced Encryption Standart algorithm by using 3 different functions provide by AEL.
+You can use the Advanced Encryption Standard algorithm by using 3 different functions provide by AEL.
 
 *   `ael::AES key_aes;`
+This create a empty key to use with AES.
 
 *   `key_aes.GenerateKey(int keybits);`
 This generate a pseudo-random key to use with AES. You can specify the number of key-bits. Those which are supported : 128, 192 and 256 bits.
 
 *   `key_aes.Encrypt(std::string plaintext);`
-This encrypt the plaintext data with the key. You must specify a key of 128, 192 or 256 bits-length exactly.
+This encrypt the plaintext data with the key. You must use a key of 128, 192 or 256 bits-length exactly.
 
 *   `key_aes.Decrypt(std::string text);`
-This is the inverted function of Encrypt. You must specify the key and its lenght in bits. Also the text to Decrypt.
+This is the inverted function of Encrypt. You must use a key and specify the text to decrypt.
 
 General example :
 
