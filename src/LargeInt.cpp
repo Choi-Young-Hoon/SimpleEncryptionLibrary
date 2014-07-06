@@ -81,7 +81,7 @@ ael::LargeInt::~LargeInt(){
 }
 
 //Convert LargeInt to a 64 type string
-std::string ael::LargeInt::as64String(){
+std::string ael::LargeInt::as64String(void){
     unsigned int asize = (nombre.size()*4);
     unsigned char a[asize];
 
@@ -146,6 +146,12 @@ std::string ael::LargeInt::as64String(){
     return d;
 }
 
+std::vector<unsigned int> ael::LargeInt::asVector(void){
+    std::vector<unsigned int> a_copy;
+    a_copy = this->nombre;
+    return a_copy;
+}
+
 //Show the LargeInt value in the console
 const void ael::LargeInt::Show(){
     for(int i = nombre.size() - 1; i >= 0; i--){
@@ -198,7 +204,7 @@ void ael::LargeInt::ToTheLeft(){
 
 //Generate a pseudo-random number
 //This function have to be more close of a random number in the future
-void ael::LargeInt::Generer(unsigned int taille){
+void ael::LargeInt::Generate(unsigned int taille){
     nombre.resize(taille);
     std::srand(time(NULL));
 

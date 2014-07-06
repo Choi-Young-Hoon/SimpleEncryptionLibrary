@@ -56,9 +56,9 @@ namespace ael
         std::string aes_key;
 
 	};
+
 	class LargeInt
 	{
-
 	public:
 		LargeInt();
 		LargeInt(std::vector<unsigned int> a);
@@ -69,15 +69,21 @@ namespace ael
 		~LargeInt();
 
 		const void Show();
-		std::string as64String();
+		std::string as64String(void);
+		std::vector<unsigned int> asVector(void);
 
 		void MultiplicationRusse(LargeInt const& a, LargeInt const& b);
 		void Modular_Exp(LargeInt& exposant, LargeInt& modulo);
 		void NumberGenerator(LargeInt& maxi, LargeInt& mini);
 
+		void BitGenerator(unsigned int lenght);
+		bool FermatPrimality(void);
+		LargeInt EuclideAlgoPGCD(LargeInt& b);
+		bool MillerRabinPrimality(unsigned int iterations);
+
 		void ToTheRight();
 		void ToTheLeft();
-		void Generer(unsigned int taille);
+		void Generate(unsigned int taille);
 		unsigned int GetFirst();
 
 		bool operator==(LargeInt const& a);
@@ -104,15 +110,7 @@ namespace ael
 	private:
 		std::vector<unsigned int> nombre;
 	};
-	class Algo
-	{
-	public:
-		static LargeInt BitGenerator(unsigned int lenght);
 
-		static bool FermatPrimality(LargeInt& b);
-		static LargeInt EuclideAlgoPGCD(LargeInt& a, LargeInt& b);
-		static bool MillerRabinPrimality(LargeInt& n0, unsigned int iterations);
-	};
 	class MD5
 	{
     public:

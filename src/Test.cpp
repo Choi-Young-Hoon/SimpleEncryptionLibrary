@@ -31,21 +31,21 @@
 bool TestDiffieHellman(void){
     ael::LargeInt p(0), g(0), A(0), B(0), a(0), b(0), s1(0), s2(0);
 
-    p = ael::Algo::BitGenerator(128);
+    p.BitGenerator(128);
 
-    while(!ael::Algo::FermatPrimality(p)){
+    while(!p.FermatPrimality()){
     //while(!MillerRabinPrimality(p, 6)){
-        p = ael::Algo::BitGenerator(128);
+        p.BitGenerator(128);
     }
 
-    g = ael::Algo::BitGenerator(64);
+    g.BitGenerator(64);
 
-    a = ael::Algo::BitGenerator(384);
+    a.BitGenerator(384);
 
 	//std::cout << "Press a touch ..." << std::endl;
     //std::getchar();
 
-    b = ael::Algo::BitGenerator(384);
+    b.BitGenerator(384);
     A = g;
     A.Modular_Exp(a, p);
     B = g;
