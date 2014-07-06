@@ -31,8 +31,6 @@ file(
 
         src/AEL.cpp
 		
-		src/AES.hpp
-		
 		src/AES.cpp
 		
 		src/LargeInt.cpp
