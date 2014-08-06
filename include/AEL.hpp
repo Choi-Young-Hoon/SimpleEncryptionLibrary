@@ -72,7 +72,7 @@ namespace ael
 		std::string as64String(void);
 		std::vector<unsigned int> asVector(void);
 
-		void MultiplicationRusse(LargeInt const& a, LargeInt const& b);
+		void RussianMultiplication(LargeInt const& a, LargeInt const& b);
 		void Modular_Exp(LargeInt& exposant, LargeInt& modulo);
 		void NumberGenerator(LargeInt& maxi, LargeInt& mini);
 

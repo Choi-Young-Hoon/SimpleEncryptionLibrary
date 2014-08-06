@@ -441,6 +441,7 @@ ael::LargeInt& ael::LargeInt::operator+(LargeInt const& a){
 }
 
 //Assignment by difference
+//Result must be positive
 void ael::LargeInt::operator-=(LargeInt const& a){
     unsigned int quit = 0, i = 0, memento = 0;
     std::vector<unsigned int> b(0);
@@ -455,10 +456,7 @@ void ael::LargeInt::operator-=(LargeInt const& a){
     while(quit == 0){
         if(i >= nombre.size()){
             if(i < a.nombre.size()){
-                b.push_back((0x100000000 - a.nombre[i]) - memento);
-                memento = 1;
-                std::cout << "Impossible" << std::endl;
-                //system("PAUSE");
+                //Error
             }
             else{
                 if(memento != 0){
@@ -494,8 +492,7 @@ void ael::LargeInt::operator-=(LargeInt const& a){
                     memento = 0;
                 }
                 else{
-                    //Impossible
-                    std::cout << "Impossible 2" << std::endl;
+                    //Error
                 }
             }
         }
@@ -582,7 +579,7 @@ ael::LargeInt& ael::LargeInt::operator*(LargeInt const& a){
 }
 
 //Product very slow
-void ael::LargeInt::MultiplicationRusse(LargeInt const& a, LargeInt const& b){
+void ael::LargeInt::RussianMultiplication(LargeInt const& a, LargeInt const& b){
     LargeInt result(0), zero(0), x(0), y(0), aa(a), bb(b);
 
     if(aa > bb){
