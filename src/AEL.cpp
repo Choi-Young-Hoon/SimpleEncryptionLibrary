@@ -45,26 +45,26 @@ void ael::LargeInt::BitGenerator(unsigned int lenght){
 
 //Fermat Primality Test
 bool ael::LargeInt::FermatPrimality(void){
-    ael::LargeInt bb(*this), un(1), p(bb), deux(2), trois(3), cinq(5), sept(7);
+    ael::LargeInt bb(*this), un(1), p(bb), two(2), three(3), five(5), seven(7);
     p -= un;
 
-    deux.Modular_Exp(p, bb);
-    if(deux != un){
+    two.Modular_Exp(p, bb);
+    if(two != un){
         return false;
     }
 
-    trois.Modular_Exp(p, bb);
-    if(trois != un){
+    three.Modular_Exp(p, bb);
+    if(three != un){
         return false;
     }
 
-    cinq.Modular_Exp(p, bb);
-    if(cinq != un){
+    five.Modular_Exp(p, bb);
+    if(five != un){
         return false;
     }
 
-    sept.Modular_Exp(p, bb);
-    if(sept != un){
+    seven.Modular_Exp(p, bb);
+    if(seven != un){
         return false;
     }
 

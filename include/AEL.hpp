@@ -34,7 +34,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <cstring>
-#include <math.h>
+#include <cmath>
 #include <vector>
 #include <iomanip>
 #include <sstream>

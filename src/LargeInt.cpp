@@ -457,6 +457,7 @@ void ael::LargeInt::operator-=(LargeInt const& a){
         if(i >= nombre.size()){
             if(i < a.nombre.size()){
                 //Error
+                std::cout << "Error difference 1" <<std::endl;
             }
             else{
                 if(memento != 0){
@@ -493,6 +494,7 @@ void ael::LargeInt::operator-=(LargeInt const& a){
                 }
                 else{
                     //Error
+                    std::cout << "Error difference 2" <<std::endl;
                 }
             }
         }
@@ -650,8 +652,8 @@ void ael::LargeInt::operator%=(LargeInt const &a){
     reste2 *= bb;
 
     if(reste2 > reste){
-        std::cout << "Error : reste" << std::endl;
-        //system("PAUSE");
+        //Error
+        std::cout << "Error remainder 1" << std::endl;
     }
 
     if(reste2 == reste){
@@ -662,8 +664,8 @@ void ael::LargeInt::operator%=(LargeInt const &a){
     }
 
     if(reste >= bb){
-        std::cout << "Error : reste bigger than require" << std::endl;
-        //system("PAUSE");
+        //Error
+        std::cout << "Error remainder 2" << std::endl;
     }
 
     nombre.swap(reste.nombre);
@@ -680,16 +682,15 @@ ael::LargeInt& ael::LargeInt::operator%(LargeInt const& a){
 
 //Modular Exponentiation
 void ael::LargeInt::Modular_Exp(LargeInt& exposant, LargeInt& modulo){
-    LargeInt result(1), base2(*this), base3(base2), exposant2(exposant), modulo2(modulo), nul(0);
+    LargeInt result(1), base2(*this), base3(base2), modulo2(modulo), nul(0);
 
-    while(exposant2 != nul){
-        if((exposant2.nombre[0] & 0x01) > 0){
+    for(ael::LargeInt exposant2(exposant); exposant2 > nul; exposant2.ToTheRight()){
+        if((exposant2.nombre[0] & 0x1) > 0){
             result *= base2;
 
             result %= modulo2;
 
         }
-        exposant2.ToTheRight();
 
         base2 *= base2;
 

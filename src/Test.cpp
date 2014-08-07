@@ -29,13 +29,15 @@
 #include "AEL.hpp"
 
 bool TestDiffieHellman(void){
-    ael::LargeInt p(0), g(0), A(0), B(0), a(0), b(0), s1(0), s2(0);
+    ael::LargeInt p(0), g(0), A(0), B(0), a(0), b(0), s1(0), s2(0), two(2);
 
-    p.BitGenerator(128);
+    //p.BitGenerator(1024);
+    p.Generate(8); //256 Bits
 
     while(!p.FermatPrimality()){
     //while(!MillerRabinPrimality(p, 6)){
-        p.BitGenerator(128);
+        //p.BitGenerator(1024);
+        p += two;
     }
 
     g.BitGenerator(64);
