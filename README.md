@@ -13,7 +13,7 @@ Implemented algorithms
 * AES-128
 * AES-192
 * AES-256
-* MD5
+* MD5 [RFC_1321] [RFC_6151]
 * Miller-Rabin primality test
 * Fermat primality test
 * Euclide GCD

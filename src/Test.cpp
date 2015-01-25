@@ -29,22 +29,27 @@
 #include "AEL.hpp"
 
 bool TestDiffieHellman(void){
-    ael::LargeInt p(0), g(0), A(0), B(0), a(0), b(0), s1(0), s2(0), two(2);
+    ael::LargeInt p(0), g(0), A(0), B(0), a(0), b(0), s1(0), s2(0), one(1), two(2), six(6), p1(0), p2(0);
 
     //p.BitGenerator(1024);
     p.Generate(8); //256 Bits
+    p = p*six;
+    p1 = p - one;
+    p2 = p + one;
 
-    while(!p.FermatPrimality()){
-    //while(!MillerRabinPrimality(p, 6)){
+    //while((!p1.FermatPrimality()) && (!p2.FermatPrimality())){
+    while((!p1.MillerRabinPrimality(6)) && (!p2.MillerRabinPrimality(6))){
         //p.BitGenerator(1024);
-        p += two;
+        p1 += six;
+        p2 += six;
+        std::cout << "ONE TURN" << std::endl;
     }
 
     g.BitGenerator(64);
 
     a.BitGenerator(384);
 
-	//std::cout << "Press a touch ..." << std::endl;
+	//std::cout << "FOUND !" << std::endl;
     //std::getchar();
 
     b.BitGenerator(384);

@@ -113,7 +113,7 @@ bool ael::LargeInt::MillerRabinPrimality(unsigned int iterations){
     a.Generate(1); //Nombre aléatoire
 
     for(unsigned int k = 0; k < iterations; k += 1){
-        a *= plusa;
+        a *= a; //a *= plusa
         a %= n0;
         a += deux;
         //a %= n0;
@@ -126,7 +126,7 @@ bool ael::LargeInt::MillerRabinPrimality(unsigned int iterations){
             //plusa += 3;
         }*/
 
-        a.Show();
+        //a.Show();
         c1 = a;
         c1.Modular_Exp(d, n0);
 
