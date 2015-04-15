@@ -85,6 +85,7 @@ namespace ael
 		void ToTheLeft();
 		void Generate(unsigned int taille);
 		unsigned int GetFirst();
+		unsigned int size();
 
 		bool operator==(LargeInt const& a);
 		bool operator!=(LargeInt const& a);
