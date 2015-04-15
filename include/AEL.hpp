@@ -86,6 +86,7 @@ namespace ael
 		void Generate(unsigned int taille);
 		unsigned int GetFirst();
 		unsigned int size();
+		bool getbit(unsigned int position);
 
 		bool operator==(LargeInt const& a);
 		bool operator!=(LargeInt const& a);

@@ -44,6 +44,14 @@ ael::LargeInt::LargeInt(std::string a){
     nombre.swap(b.nombre);
 }
 
+//Get the bit in the position wanted
+bool ael::LargeInt::getbit(unsigned int position){
+    unsigned int posblock = position / 32, posbit = position % 32;
+    unsigned int block = nombre[posblock], posfinal = 0x01;
+    posfinal = posfinal << posbit;
+    return((posfinal & block) > 0);
+}
+
 //Size
 unsigned int ael::LargeInt::size(){
     unsigned int l = this->nombre.size();
