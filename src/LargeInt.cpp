@@ -44,6 +44,22 @@ ael::LargeInt::LargeInt(std::string a){
     nombre.swap(b.nombre);
 }
 
+//Size
+unsigned int ael::LargeInt::size(){
+    unsigned int l = this->nombre.size();
+    unsigned int last = this->nombre[l];
+    l *= 32;
+    for (unsigned int i=0xFFFFFFFF; i>=0; i/=2){
+        if(last & i > 0){
+            l -=1;
+        }
+        else{
+            break;
+        }
+    }
+    return l;
+}
+
 //Char to LargeInt
 ael::LargeInt::LargeInt(unsigned char a[], unsigned int size){
     unsigned int taille = ceil(size / 4.0), h = 0;
