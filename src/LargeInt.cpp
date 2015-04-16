@@ -52,14 +52,46 @@ bool ael::LargeInt::getbit(unsigned int position){
     return((posfinal & block) > 0);
 }
 
+//Set a bit value
+void ael::LargeInt::setbit(bool bit, unsigned int position){
+    unsigned int posblock = position / 32, posbit = position % 32;
+    unsigned int block = nombre[posblock];
+    if (bit){
+        unsigned int posfinal = 0x01;
+        posfinal = posfinal << posbit;
+        nombre[posblock] = block | posfinal;
+    }
+    else{
+        unsigned int posfinal = 0x01;
+        posfinal = posfinal << posbit;
+        posfinal = ~posfinal;
+        nombre[posblock] = block & posfinal;
+    }
+
+    if(nombre[posblock] == 0){
+        nombre.pop_back();
+    }
+}
+
 //Size
 unsigned int ael::LargeInt::size(){
+
     unsigned int l = this->nombre.size();
-    unsigned int last = this->nombre[l];
+
+    unsigned int last = this->nombre[l-1];
+
+    if (last == 0){
+        return 0;
+    }
+
     l *= 32;
-    for (unsigned int i=0xFFFFFFFF; i>=0; i/=2){
-        if(last & i > 0){
-            l -=1;
+
+    for (unsigned int i=0x80000000; i>0; i=i>>1){
+        if((last & i) > 0){
+            break;
+        }
+        else if (l > 0){
+            l -= 1;
         }
         else{
             break;
@@ -458,8 +490,8 @@ void ael::LargeInt::operator+=(LargeInt const& a){
 }
 
 //Sum
-ael::LargeInt& ael::LargeInt::operator+(LargeInt const& a){
-    LargeInt& b(*this);
+ael::LargeInt ael::LargeInt::operator+(LargeInt const& a){
+    LargeInt b(*this);
     b += a;
     return b;
 }
@@ -482,6 +514,7 @@ void ael::LargeInt::operator-=(LargeInt const& a){
             if(i < a.nombre.size()){
                 //Error
                 std::cout << "Error difference 1" <<std::endl;
+                //system("PAUSE");
             }
             else{
                 if(memento != 0){
@@ -538,8 +571,8 @@ void ael::LargeInt::operator-=(LargeInt const& a){
 }
 
 //Difference
-ael::LargeInt& ael::LargeInt::operator-(LargeInt const& a){
-    LargeInt& b(*this);
+ael::LargeInt ael::LargeInt::operator-(LargeInt const& a){
+    LargeInt b(*this);
     b -= a;
     return b;
 }
@@ -598,8 +631,8 @@ void ael::LargeInt::operator*=(LargeInt const& a){
 }
 
 //Product
-ael::LargeInt& ael::LargeInt::operator*(LargeInt const& a){
-    LargeInt& b(*this);
+ael::LargeInt ael::LargeInt::operator*(LargeInt const& a){
+    LargeInt b(*this);
     b *= a;
     return b;
 }
@@ -698,8 +731,8 @@ void ael::LargeInt::operator%=(LargeInt const &a){
 }
 
 //Reminder
-ael::LargeInt& ael::LargeInt::operator%(LargeInt const& a){
-    LargeInt& b(*this);
+ael::LargeInt ael::LargeInt::operator%(LargeInt const& a){
+    LargeInt b(*this);
     b %= a;
     return b;
 }
