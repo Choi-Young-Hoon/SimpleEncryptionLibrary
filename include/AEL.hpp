@@ -126,6 +126,8 @@ namespace ael
     private:
         std::vector<unsigned int> text_digest;
 	};
+
+	LargeInt Karatsuba(LargeInt& N, LargeInt& M);
 }
 
 #endif

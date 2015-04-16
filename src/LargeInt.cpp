@@ -756,4 +756,3 @@ void ael::LargeInt::Modular_Exp(LargeInt& exposant, LargeInt& modulo){
 
     nombre.swap(result.nombre);
 }
-

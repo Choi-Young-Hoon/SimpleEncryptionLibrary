@@ -157,3 +157,135 @@ bool ael::LargeInt::MillerRabinPrimality(unsigned int iterations){
     }
     return status;
 }
+
+ael::LargeInt ael::Karatsuba(ael::LargeInt& N, ael::LargeInt& M){
+    unsigned int k = 0, aka = 0;
+
+    if (N < M){
+        k = N.size();
+        aka = M.size();
+    }
+    else{
+        k = M.size();
+        aka = N.size();
+    }
+
+    ael::LargeInt a(0), b(0), c(0), d(0), P1(0), P2(0), P3(0), A(0), B(0), S(0), zero(0), S1(0), S2(0), atemp(0), ctemp(0);
+
+    if ((k == 0) || (N == zero) || (M == zero)){
+        return(S);
+    }
+    else if(aka <= 16){
+        ael::LargeInt result(N.GetFirst()*M.GetFirst());
+        //result = N;
+        //result *= M;
+        return(result);
+    }
+
+    a = N;
+    for (unsigned int i = 0; i < (k/2); i++){
+        a.ToTheRight();
+    }
+    b = N;
+    atemp = a;
+    for (unsigned int i = 0; i < (k/2); i++){
+        atemp.ToTheLeft();
+    }
+    b -= atemp;
+
+    c = M;
+    for (unsigned int i = 0; i < (k/2); i++){
+        c.ToTheRight();
+    }
+    d = M;
+    ctemp = c;
+    for (unsigned int i = 0; i < (k/2); i++){
+        ctemp.ToTheLeft();
+    }
+    d -= ctemp;
+
+    if((a == zero) || (c == zero)){
+        P1 = zero;
+    }
+    else{
+        P1 = ael::Karatsuba(a,c);
+    }
+
+    if((b == zero) || (d == zero)){
+        P2 = zero;
+    }
+    else{
+        P2 = ael::Karatsuba(b,d);
+    }
+
+    int factor = -1;
+
+    if(a >= b){
+        S1 = a;
+        S1 -= b;
+        if(c > d){
+            S2 = c;
+            S2 -= d;
+            P3 = ael::Karatsuba(S1,S2);
+            factor = -1;
+        }
+        else if(c == d){
+            S2 = zero;
+            P3 = zero;
+            factor = 0;
+        }
+        else{
+            S2 = d;
+            S2 -= c;
+            P3 = ael::Karatsuba(S1,S2);
+            factor = 1;
+        }
+    }
+    else{
+        S1 = b;
+        S1 -= a;
+        if(c >= d){
+            S2 = c;
+            S2 -= d;
+            P3 = ael::Karatsuba(S1,S2);
+            factor = 1;
+        }
+        else if(c == d){
+            S2 = zero;
+            P3 = zero;
+            factor = 0;
+        }
+        else{
+            S2 = d;
+            S2 -= c;
+            P3 = ael::Karatsuba(S1,S2);
+            factor = -1;
+        }
+    }
+
+    A = P1;
+
+    for (unsigned int i = 0; i < 2*(k/2); i++){
+        A.ToTheLeft();
+    }
+
+    B = P1;
+    B += P2;
+
+    if(factor < 0){
+        B -= P3;
+    }
+    else if(factor > 0){
+        B += P3;
+    }
+
+    for (unsigned int j = 0; j < (k/2); j++){
+        B.ToTheLeft();
+    }
+
+    S = A;
+    S += B;
+    S += P2;
+
+    return(S);
+}
