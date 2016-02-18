@@ -56,7 +56,7 @@ add_executable(
 		
 		src/Test.cpp
 		
-		include/ael.hpp
+		include/AEL.hpp
 )
 
 target_link_libraries(ael-test ael)
