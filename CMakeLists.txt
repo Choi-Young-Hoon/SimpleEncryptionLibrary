@@ -13,7 +13,7 @@ set(LIBRARY_OUTPUT_PATH lib/${CMAKE_BUILD_TYPE})
 
 set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})
 
-option(BUILD_SHARED_LIBS "TRUE to build AEL as shared librarie, FALSE to build it as static librarie" TRUE)
+option(BUILD_SHARED_LIBS "TRUE to build AEL as shared library, FALSE to build it as static library" TRUE)
 
 
 #include files
