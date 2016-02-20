@@ -44,7 +44,7 @@ ael::LargeInt::LargeInt(std::string a){
     nombre.swap(b.nombre);
 }
 
-ael::randinit(){
+void ael::randinit(void){
     std::srand(time(NULL));
 }
 
