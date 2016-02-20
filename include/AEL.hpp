@@ -127,6 +127,7 @@ namespace ael
         std::vector<unsigned int> text_digest;
 	};
 
+    void randinit(void);
 	LargeInt Karatsuba(LargeInt& N, LargeInt& M);
 }
 

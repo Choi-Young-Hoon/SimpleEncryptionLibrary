@@ -44,6 +44,10 @@ ael::LargeInt::LargeInt(std::string a){
     nombre.swap(b.nombre);
 }
 
+ael::randinit(){
+    std::srand(time(NULL));
+}
+
 //Get the bit in the position wanted
 bool ael::LargeInt::getbit(unsigned int position){
     unsigned int posblock = position / 32, posbit = position % 32;
@@ -262,7 +266,7 @@ void ael::LargeInt::ToTheLeft(){
 //This function have to be more close of a random number in the future
 void ael::LargeInt::Generate(unsigned int taille){
     nombre.resize(taille);
-    std::srand(time(NULL));
+    //std::srand(time(NULL));
 
     for(unsigned int i = 0; i < nombre.size(); i++){
         nombre[i] = (std::rand()*std::rand()) % 0x100000000;
@@ -281,7 +285,7 @@ void ael::LargeInt::Generate(unsigned int taille){
 void ael::LargeInt::NumberGenerator(LargeInt& maxi, LargeInt& mini){
     unsigned int integerlenght = 0, extrasize = 1, filter = 0, random = 0;
     bool start = true;
-    srand(time(NULL));
+    //srand(time(NULL));
 
     if(maxi.nombre.size() == mini.nombre.size()){
         integerlenght = maxi.nombre.size();

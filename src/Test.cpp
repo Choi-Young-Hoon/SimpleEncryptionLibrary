@@ -31,6 +31,7 @@
 bool TestDiffieHellman(void){
     ael::LargeInt p(0), g(0), A(0), B(0), a(0), b(0), s1(0), s2(0), one(1), two(2), six(6), p1(0), p2(0);
 
+    p.randinit();
     //p.BitGenerator(1024);
     p.Generate(8); //256 Bits
     p = p*six;
