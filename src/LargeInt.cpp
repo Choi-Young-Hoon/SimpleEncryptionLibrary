@@ -44,6 +44,7 @@ ael::LargeInt::LargeInt(std::string a){
     nombre.swap(b.nombre);
 }
 
+//Init the random function
 void ael::randinit(void){
     std::srand(time(NULL));
 }
@@ -90,7 +91,7 @@ unsigned int ael::LargeInt::size(){
 
     l *= 32;
 
-    for (unsigned int i=0x80000000; i>0; i=i>>1){
+    for (unsigned int i=0xF0000000; i>0; i=i>>1){
         if((last & i) > 0){
             break;
         }
@@ -124,9 +125,10 @@ ael::LargeInt::LargeInt(unsigned char a[], unsigned int size){
 //Copy from another LargeInt
 ael::LargeInt::LargeInt(LargeInt const& a){
     nombre.resize(a.nombre.size());
-    for(unsigned int i = 0; i < a.nombre.size(); i++){
-        nombre[i] = a.nombre[i];
-    }
+    //for(unsigned int i = 0; i < a.nombre.size(); i++){
+    //    nombre[i] = a.nombre[i];
+    //}
+    nombre = a.nombre;
 }
 
 //Put a value to the first array of the LargeInt
@@ -222,21 +224,21 @@ const void ael::LargeInt::Show(){
 
 //Move to the right all the bits of the LargeInt
 void ael::LargeInt::ToTheRight(){
-    unsigned int buffer = 0;
-    for(signed int i = (nombre.size() - 1); i >= 0; i--){
+    unsigned int buffer = 0, numbersize = nombre.size();
+    for(signed int i = (numbersize - 1); i >= 0; i--){
         if((nombre[i]&1)>0){
             nombre[i]>>=1;
-            nombre[i]+= (buffer*0x80000000);
+            nombre[i]+= (buffer*0xF0000000);
             buffer = 1;
         }
         else{
             nombre[i]>>=1;
-            nombre[i]+= (buffer*0x80000000);
+            nombre[i]+= (buffer*0xF0000000);
             buffer = 0;
         }
     }
-    if(nombre[nombre.size()-1] == 0 ){
-        if(nombre.size() > 1){
+    if(nombre[numbersize-1] == 0 ){
+        if(numbersize > 1){
             nombre.pop_back();
         }
     }
@@ -244,9 +246,9 @@ void ael::LargeInt::ToTheRight(){
 
 //Move to the left all the bits of the LargeInt
 void ael::LargeInt::ToTheLeft(){
-    unsigned int buffer = 0;
-    for(unsigned int i = 0; i < nombre.size(); i++){
-        if((nombre[i]&0x80000000)>0){
+    unsigned int buffer = 0, numbersize = nombre.size();
+    for(unsigned int i = 0; i < numbersize; i++){
+        if((nombre[i]&0xF0000000)>0){
             nombre[i]<<=1;
             nombre[i]+=buffer;
             buffer = 1;
@@ -349,12 +351,7 @@ unsigned int ael::LargeInt::GetFirst(){
 
 //Is equal operator
 bool ael::LargeInt::operator==(LargeInt const& a){
-    if(nombre == a.nombre){
-        return true;
-    }
-    else{
-        return false;
-    }
+    return(nombre == a.nombre);
 }
 
 //Isn't equal operator
@@ -365,17 +362,18 @@ bool ael::LargeInt::operator!=(LargeInt const& a){
 //Inferior operator
 bool ael::LargeInt::operator<(LargeInt const& a){
     bool state = false;
-    if(nombre.size() < a.nombre.size()){
+    unsigned int numbersize = nombre.size(), asize = a.nombre.size();
+    if(numbersize < asize){
         return true;
     }
-    else if(nombre.size() > a.nombre.size()){
+    else if(numbersize > asize){
         return false;
     }
     else if(nombre == a.nombre){
         return false;
     }
     else{
-        for(int long long i = (nombre.size() - 1); i >= 0; i--){
+        for(int long long i = (numbersize - 1); i >= 0; i--){
             if(nombre[i] < a.nombre[i]){
                 state = true;
                 break;
@@ -426,10 +424,8 @@ bool ael::LargeInt::operator>=(LargeInt const& a){
 ael::LargeInt& ael::LargeInt::operator=(LargeInt const& a){
     nombre.resize(a.nombre.size());
 
-    for(unsigned int long long i = 0; i < a.nombre.size(); i++){
-        nombre[i] = a.nombre[i];
-    }
-
+    nombre = a.nombre;
+    
     return *this;
 }
 

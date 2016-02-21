@@ -41,10 +41,10 @@ bool TestDiffieHellman(void){
     //while((!p1.MillerRabinPrimality(6)) && (!p2.MillerRabinPrimality(6))){
     while((!p1.FermatPrimality()) && (!p2.FermatPrimality())){
         //p.BitGenerator(1024);
-        //p1 += six;
-        p1.Generate(8);
-        //p2 += six;
-        p2.Generate(8);
+        p1 += six;
+        //p1.Generate(8);
+        p2 += six;
+        //p2.Generate(8);
         std::cout << "ONE TURN" << std::endl;
     }
 
