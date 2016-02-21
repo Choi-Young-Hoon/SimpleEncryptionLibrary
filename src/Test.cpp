@@ -1,6 +1,6 @@
 /* ****************************************************************************
  *
- * Copyright 2013, 2014 informaticien77
+ * Copyright 2013-2016 informaticien77
  *
  * This file is part of Advanced Encryption Library.
  *
@@ -31,18 +31,20 @@
 bool TestDiffieHellman(void){
     ael::LargeInt p(0), g(0), A(0), B(0), a(0), b(0), s1(0), s2(0), one(1), two(2), six(6), p1(0), p2(0);
 
-    ael::randinit();
+    //ael::randinit();
     //p.BitGenerator(1024);
     p.Generate(8); //256 Bits
     p = p*six;
     p1 = p - one;
     p2 = p + one;
 
-    //while((!p1.FermatPrimality()) && (!p2.FermatPrimality())){
-    while((!p1.MillerRabinPrimality(6)) && (!p2.MillerRabinPrimality(6))){
+    //while((!p1.MillerRabinPrimality(6)) && (!p2.MillerRabinPrimality(6))){
+    while((!p1.FermatPrimality()) && (!p2.FermatPrimality())){
         //p.BitGenerator(1024);
-        p1 += six;
-        p2 += six;
+        //p1 += six;
+        p1.Generate(8);
+        //p2 += six;
+        p2.Generate(8);
         std::cout << "ONE TURN" << std::endl;
     }
 
@@ -50,7 +52,7 @@ bool TestDiffieHellman(void){
 
     a.BitGenerator(384);
 
-	//std::cout << "FOUND !" << std::endl;
+	std::cout << "FOUND !" << std::endl;
     //std::getchar();
 
     b.BitGenerator(384);
@@ -78,6 +80,9 @@ int main(){
 		//License information
 		std::cout << "This program and all source files of the Advanced Encryption Library are under the Lesser General Public License (LGPL). See COPYING and LESSER.COPYING files which you should have with the source code." << std::endl << std::endl;
 
+        //Random generators initialization
+        ael::randinit();
+        
 		//Test the AES-128Bits algorithm
 		std::cout << "AES 128 Bits : ";
 		ael::AES key_aes_128;

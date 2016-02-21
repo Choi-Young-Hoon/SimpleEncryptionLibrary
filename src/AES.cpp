@@ -1255,7 +1255,7 @@ ael::AES::AES(std::string key){
 }
 
 void ael::AES::GenerateKey(int keybits){
-    std::srand(time(NULL));
+    //std::srand(time(NULL));
 	aes_key = "";
 	int i = 0;
 	for(i = 0; i < (keybits/8); i++){

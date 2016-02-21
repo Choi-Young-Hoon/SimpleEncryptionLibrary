@@ -1,6 +1,6 @@
 /* ****************************************************************************
  *
- * Copyright 2013, 2014 informaticien77
+ * Copyright 2013-2016 informaticien77
  *
  * This file is part of Advanced Encryption Library.
  *

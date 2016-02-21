@@ -49,16 +49,26 @@ add_library(
 
 )
 
+add_executable(
+		aeltools
+		
+		src/main.cpp
+		
+		include/AEL.hpp
+)
+
+target_link_libraries(aeltools ael)
+
 if(${BUILD_TEST_PROGRAM} MATCHES "ON")
 
 add_executable(
-		ael-test
+		aeltest
 		
 		src/Test.cpp
 		
 		include/AEL.hpp
 )
 
-target_link_libraries(ael-test ael)
+target_link_libraries(aeltest ael)
 
 endif(${BUILD_TEST_PROGRAM} MATCHES "ON")
