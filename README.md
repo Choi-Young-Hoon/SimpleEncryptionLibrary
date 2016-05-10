@@ -18,8 +18,8 @@ Implemented algorithms
 * Fermat primality test
 * Euclide GCD
 
-Compiling
----------
+Build
+-----
 
 You have to use CMake to configure the compilation of the Library Project for your system.
 
@@ -27,6 +27,11 @@ You can decide to compile the test program. And also if you want a shared lib or
 Also, you can compile Release or/and Debug version of it.
 
 Then you have to compile it with a compiler like MinGW32, Visual C++ ...
+
+### Linux
+
+- ``` cmake ./CMakeLists.txt  ```
+- ``` make  ```
 
 Configuring
 -----------
