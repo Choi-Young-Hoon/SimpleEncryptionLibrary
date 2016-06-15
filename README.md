@@ -1,5 +1,5 @@
-Advanced Encryption Library
-===========================
+Simple Encryption Library
+=========================
 
 What is it ?
 ------------
@@ -14,6 +14,10 @@ Implemented algorithms
 * AES-192
 * AES-256
 * MD5 [RFC_1321] [RFC_6151]
+
+In progress
+-----------
+
 * Miller-Rabin primality test
 * Fermat primality test
 * Euclide GCD
@@ -47,14 +51,14 @@ All instructions are in the doc directory.
 License (LGPL)
 --------------
 
-Copyright 2013, 2014 informaticien77
+Copyright 2013-2016 informaticien77
 
-Advanced Encryption Library is free software: you can redistribute it and/or modify
+Simple Encryption Library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-Advanced Encryption Library is distributed in the hope that it will be useful,
+Simple Encryption Library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.

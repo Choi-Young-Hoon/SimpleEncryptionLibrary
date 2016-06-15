@@ -2,20 +2,20 @@
  *
  * Copyright 2013-2016 informaticien77
  *
- * This file is part of Advanced Encryption Library.
+ * This file is part of Simple Encryption Library.
  *
- * Advanced Encryption Library is free software: you can redistribute it and/or modify
+ * Simple Encryption Library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Advanced Encryption Library is distributed in the hope that it will be useful,
+ * Simple Encryption Library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Advanced Encryption Library.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Simple Encryption Library.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 				Test.cpp
  *
@@ -26,14 +26,14 @@
  */
 
 
-#include "AEL.hpp"
+#include "SEL.hpp"
 
 bool TestDiffieHellman(void){
-    ael::LargeInt p(0), g(0), A(0), B(0), a(0), b(0), s1(0), s2(0), one(1), two(2), six(6), p1(0), p2(0);
+    sel::LargeInt p(0), g(0), A(0), B(0), a(0), b(0), s1(0), s2(0), one(1), two(2), six(6), p1(0), p2(0);
 
     //ael::randinit();
     //p.BitGenerator(1024);
-    p.Generate(8); //256 Bits
+    p.Generate(4); //128 Bits
     p = p*six;
     p1 = p - one;
     p2 = p + one;
@@ -74,18 +74,17 @@ bool TestDiffieHellman(void){
 }
 
 int main(){
-
-		std::cout << "Test program of AEL launched ..." << std::endl << std::endl;
+		std::cout << "Test program of SEL launched ..." << std::endl << std::endl;
 
 		//License information
-		std::cout << "This program and all source files of the Advanced Encryption Library are under the Lesser General Public License (LGPL). See COPYING and LESSER.COPYING files which you should have with the source code." << std::endl << std::endl;
+		std::cout << "This program and all source files of the Simple Encryption Library are under the Lesser General Public License (LGPL). See COPYING and LESSER.COPYING files which you should have with the source code." << std::endl << std::endl;
 
         //Random generators initialization
-        ael::randinit();
-        
+        sel::randinit();
+
 		//Test the AES-128Bits algorithm
 		std::cout << "AES 128 Bits : ";
-		ael::AES key_aes_128;
+		sel::AES key_aes_128;
 		key_aes_128.GenerateKey(128);
 		std::string encrypt128 = key_aes_128.Encrypt("Test program ...");
 		std::string decrypt128 = key_aes_128.Decrypt(encrypt128);
@@ -99,7 +98,7 @@ int main(){
 
 		//Test the AES-192Bits algorithm
 		std::cout << "AES 192 Bits : ";
-		ael::AES key_aes_192;
+		sel::AES key_aes_192;
 		key_aes_192.GenerateKey(192);
 		std::string encrypt192 = key_aes_192.Encrypt("Test program ...");
 		std::string decrypt192 = key_aes_192.Decrypt(encrypt192);
@@ -113,7 +112,7 @@ int main(){
 
 		//Test the AES-256Bits algorithm
 		std::cout << "AES 256 Bits : ";
-		ael::AES key_aes_256;
+		sel::AES key_aes_256;
 		key_aes_256.GenerateKey(256);
 		std::string encrypt256 = key_aes_256.Encrypt("Test program ...");
 		std::string decrypt256 = key_aes_256.Decrypt(encrypt256);
@@ -127,7 +126,7 @@ int main(){
 
 		//Test the MD5 algorithm
 		std::cout << "MD5 : ";
-		ael::MD5 md5("Hello world !");
+		sel::MD5 md5("Hello world !");
 		if(md5.asHexString() == "67c18d060479c5d867c9b91c80edeb4c"){
 			std::cout << "OK" << std::endl;
 		}

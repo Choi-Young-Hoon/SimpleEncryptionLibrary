@@ -1,21 +1,21 @@
 /* ****************************************************************************
  *
- * Copyright 2013, 2014 informaticien77
+ * Copyright 2013-2016 informaticien77
  *
- * This file is part of Advanced Encryption Library.
+ * This file is part of Simple Encryption Library.
  *
- * Advanced Encryption Library is free software: you can redistribute it and/or modify
+ * Simple Encryption Library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Advanced Encryption Library is distributed in the hope that it will be useful,
+ * Simple Encryption Library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Advanced Encryption Library.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Simple Encryption Library.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 				MD5.cpp
  *
@@ -25,13 +25,13 @@
  * ****************************************************************************
  */
 
-#include "AEL.hpp"
+#include "SEL.hpp"
 
 unsigned int md5_rotate_left(unsigned int x, unsigned int n) {
   return ((x << n) | (x >> (32-n)));
 }
 
-ael::MD5::MD5(const std::string text){
+sel::MD5::MD5(const std::string text){
     //Note: All variables are unsigned 32 bit and wrap modulo 2^32 when calculating
     std::vector<unsigned int> message;
     unsigned int lengthMessage[2];
@@ -189,7 +189,7 @@ ael::MD5::MD5(const std::string text){
 
 }
 
-std::string ael::MD5::asString(){
+std::string sel::MD5::asString(){
     std::string result = "";
     for(unsigned int i = 0; i < text_digest.size(); i++){
         result += (text_digest[i] & 0xFF);
@@ -200,7 +200,7 @@ std::string ael::MD5::asString(){
     return result;
 }
 
-std::string ael::MD5::asHexString(){
+std::string sel::MD5::asHexString(){
     std::ostringstream ss;
     for(unsigned int i = 0; i < text_digest.size(); i++){
         ss << std::setfill('0') << std::setw(8) << std::hex << text_digest[i];
@@ -208,7 +208,7 @@ std::string ael::MD5::asHexString(){
     return ss.str();
 }
 
-std::vector<unsigned int> ael::MD5::asVector(){
+std::vector<unsigned int> sel::MD5::asVector(){
     std::vector<unsigned int> result;
     result = text_digest;
     return result;

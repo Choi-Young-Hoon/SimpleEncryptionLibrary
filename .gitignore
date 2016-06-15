@@ -1,3 +1,6 @@
 Makefile
 *.cmake
 *.so
+*.cbp
+CMakeFiles/*
+CMakeCache.txt

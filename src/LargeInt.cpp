@@ -2,20 +2,20 @@
  *
  * Copyright 2013-2016 informaticien77
  *
- * This file is part of Advanced Encryption Library.
+ * This file is part of Simple Encryption Library.
  *
- * Advanced Encryption Library is free software: you can redistribute it and/or modify
+ * Simple Encryption Library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Advanced Encryption Library is distributed in the hope that it will be useful,
+ * Simple Encryption Library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Advanced Encryption Library.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Simple Encryption Library.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 				LargeInt.cpp
  *
@@ -25,40 +25,40 @@
  * ****************************************************************************
  */
 
-#include "AEL.hpp"
+#include "SEL.hpp"
 
 //Constructor
-ael::LargeInt::LargeInt(){
+sel::LargeInt::LargeInt(){
     nombre.resize(0);
     nombre.clear();
 }
 
 //Vector of unsigned int to LargeInt
-ael::LargeInt::LargeInt(std::vector<unsigned int> a){
+sel::LargeInt::LargeInt(std::vector<unsigned int> a){
     nombre = a;
 }
 
 //String to LargeInt
-ael::LargeInt::LargeInt(std::string a){
-    ael::LargeInt b((unsigned char *)a.c_str(), a.size());
+sel::LargeInt::LargeInt(std::string a){
+    sel::LargeInt b((unsigned char *)a.c_str(), a.size());
     nombre.swap(b.nombre);
 }
 
 //Init the random function
-void ael::randinit(void){
+void sel::randinit(void){
     std::srand(time(NULL));
 }
 
 //Get the bit in the position wanted
-bool ael::LargeInt::getbit(unsigned int position){
-    unsigned int posblock = position / 32, posbit = position % 32;
+bool sel::LargeInt::getbit(unsigned int position){
+    unsigned int posblock = position << 5, posbit = position % 32;
     unsigned int block = nombre[posblock], posfinal = 0x01;
     posfinal = posfinal << posbit;
     return((posfinal & block) > 0);
 }
 
 //Set a bit value
-void ael::LargeInt::setbit(bool bit, unsigned int position){
+void sel::LargeInt::setbit(bool bit, unsigned int position){
     unsigned int posblock = position / 32, posbit = position % 32;
     unsigned int block = nombre[posblock];
     if (bit){
@@ -79,7 +79,7 @@ void ael::LargeInt::setbit(bool bit, unsigned int position){
 }
 
 //Size
-unsigned int ael::LargeInt::size(){
+unsigned int sel::LargeInt::size(){
 
     unsigned int l = this->nombre.size();
 
@@ -89,7 +89,7 @@ unsigned int ael::LargeInt::size(){
         return 0;
     }
 
-    l *= 32;
+    l >> 5;
 
     for (unsigned int i=0x80000000; i>0; i=i>>1){
         if((last & i) > 0){
@@ -106,7 +106,7 @@ unsigned int ael::LargeInt::size(){
 }
 
 //Char to LargeInt
-ael::LargeInt::LargeInt(unsigned char a[], unsigned int size){
+sel::LargeInt::LargeInt(unsigned char a[], unsigned int size){
     unsigned int taille = ceil(size / 4.0), h = 0;
     nombre.resize(taille);
     for(unsigned int i = 0; i < taille; i++){
@@ -123,24 +123,24 @@ ael::LargeInt::LargeInt(unsigned char a[], unsigned int size){
 }
 
 //Copy from another LargeInt
-ael::LargeInt::LargeInt(LargeInt const& a){
+sel::LargeInt::LargeInt(LargeInt const& a){
     //nombre.resize(a.nombre.size());
     nombre = a.nombre;
 }
 
 //Put a value to the first array of the LargeInt
-ael::LargeInt::LargeInt(unsigned int a){
+sel::LargeInt::LargeInt(unsigned int a){
     nombre.resize(1);
     nombre[0] = a;
 }
 
 //Destructor
-ael::LargeInt::~LargeInt(){
+sel::LargeInt::~LargeInt(){
 
 }
 
 //Convert LargeInt to a 64 type string
-std::string ael::LargeInt::as64String(void){
+std::string sel::LargeInt::as64String(void){
     unsigned int asize = (nombre.size()*4);
     unsigned char a[asize];
 
@@ -205,14 +205,14 @@ std::string ael::LargeInt::as64String(void){
     return d;
 }
 
-std::vector<unsigned int> ael::LargeInt::asVector(void){
+std::vector<unsigned int> sel::LargeInt::asVector(void){
     std::vector<unsigned int> a_copy;
     a_copy = this->nombre;
     return a_copy;
 }
 
 //Show the LargeInt value in the console
-const void ael::LargeInt::Show(){
+const void sel::LargeInt::Show(){
     for(int i = nombre.size() - 1; i >= 0; i--){
         std::cout << std::hex << nombre[i] << " ";
     }
@@ -220,7 +220,7 @@ const void ael::LargeInt::Show(){
 }
 
 //Move to the right all the bits of the LargeInt
-void ael::LargeInt::ToTheRight(){
+void sel::LargeInt::ToTheRight(){
     unsigned int buffer = 0, numbersize = nombre.size();
     for(signed int i = (numbersize - 1); i >= 0; i--){
         if((nombre[i]&1)>0){
@@ -242,7 +242,7 @@ void ael::LargeInt::ToTheRight(){
 }
 
 //Move to the left all the bits of the LargeInt
-void ael::LargeInt::ToTheLeft(){
+void sel::LargeInt::ToTheLeft(){
     unsigned int buffer = 0, numbersize = nombre.size();
     for(unsigned int i = 0; i < numbersize; i++){
         if((nombre[i]&0x80000000)>0){
@@ -263,9 +263,8 @@ void ael::LargeInt::ToTheLeft(){
 
 //Generate a pseudo-random number
 //This function have to be more close of a random number in the future
-void ael::LargeInt::Generate(unsigned int taille){
+void sel::LargeInt::Generate(unsigned int taille){
     nombre.resize(taille);
-    //std::srand(time(NULL));
 
     for(unsigned int i = 0; i < nombre.size(); i++){
         nombre[i] = (std::rand()*std::rand()) % 0x100000000;
@@ -281,7 +280,7 @@ void ael::LargeInt::Generate(unsigned int taille){
 
 //Generate a pseudo-random number include between two limits
 //Also this function will be improve
-void ael::LargeInt::NumberGenerator(LargeInt& maxi, LargeInt& mini){
+void sel::LargeInt::NumberGenerator(LargeInt& maxi, LargeInt& mini){
     unsigned int integerlenght = 0, extrasize = 1, filter = 0, random = 0;
     bool start = true;
     //srand(time(NULL));
@@ -342,22 +341,22 @@ void ael::LargeInt::NumberGenerator(LargeInt& maxi, LargeInt& mini){
 }
 
 //Get the fisrt array of the vector number.
-unsigned int ael::LargeInt::GetFirst(){
+unsigned int sel::LargeInt::GetFirst(){
     return nombre[0];
 }
 
 //Is equal operator
-bool ael::LargeInt::operator==(LargeInt const& a){
+bool sel::LargeInt::operator==(LargeInt const& a){
     return(nombre == a.nombre);
 }
 
 //Isn't equal operator
-bool ael::LargeInt::operator!=(LargeInt const& a){
+bool sel::LargeInt::operator!=(LargeInt const& a){
     return !(*this == a);
 }
 
 //Inferior operator
-bool ael::LargeInt::operator<(LargeInt const& a){
+bool sel::LargeInt::operator<(LargeInt const& a){
     bool state = false;
     unsigned int numbersize = nombre.size(), asize = a.nombre.size();
     if(numbersize < asize){
@@ -385,7 +384,7 @@ bool ael::LargeInt::operator<(LargeInt const& a){
 }
 
 //Inferior or equal operator
-bool ael::LargeInt::operator<=(LargeInt const& a){
+bool sel::LargeInt::operator<=(LargeInt const& a){
     if(*this < a){
         return true;
     }
@@ -398,7 +397,7 @@ bool ael::LargeInt::operator<=(LargeInt const& a){
 }
 
 //Superior operator
-bool ael::LargeInt::operator>(LargeInt const& a){
+bool sel::LargeInt::operator>(LargeInt const& a){
     if(*this <= a){
         return false;
     }
@@ -408,7 +407,7 @@ bool ael::LargeInt::operator>(LargeInt const& a){
 }
 
 //Superior or equal operator
-bool ael::LargeInt::operator>=(LargeInt const& a){
+bool sel::LargeInt::operator>=(LargeInt const& a){
     if(*this < a){
         return false;
     }
@@ -418,16 +417,16 @@ bool ael::LargeInt::operator>=(LargeInt const& a){
 }
 
 //Equal operator
-ael::LargeInt& ael::LargeInt::operator=(LargeInt const& a){
+sel::LargeInt& sel::LargeInt::operator=(LargeInt const& a){
     //nombre.resize(a.nombre.size());
 
     nombre = a.nombre;
-    
+
     return *this;
 }
 
 //Assignment by sum
-void ael::LargeInt::operator+=(LargeInt const& a){
+void sel::LargeInt::operator+=(LargeInt const& a){
     unsigned int long long buffer = 0, memento = 0;
     unsigned int diff = 0, quit = 0, i = 0;
     std::vector<unsigned int> b(0);
@@ -487,7 +486,7 @@ void ael::LargeInt::operator+=(LargeInt const& a){
 }
 
 //Sum
-ael::LargeInt ael::LargeInt::operator+(LargeInt const& a){
+sel::LargeInt sel::LargeInt::operator+(LargeInt const& a){
     LargeInt b(*this);
     b += a;
     return b;
@@ -495,7 +494,7 @@ ael::LargeInt ael::LargeInt::operator+(LargeInt const& a){
 
 //Assignment by difference
 //Result must be positive
-void ael::LargeInt::operator-=(LargeInt const& a){
+void sel::LargeInt::operator-=(LargeInt const& a){
     unsigned int quit = 0, i = 0, memento = 0;
     std::vector<unsigned int> b(0);
     unsigned int long long buffer = 0x100000000;
@@ -568,14 +567,14 @@ void ael::LargeInt::operator-=(LargeInt const& a){
 }
 
 //Difference
-ael::LargeInt ael::LargeInt::operator-(LargeInt const& a){
+sel::LargeInt sel::LargeInt::operator-(LargeInt const& a){
     LargeInt b(*this);
     b -= a;
     return b;
 }
 
 //Assignment by product
-void ael::LargeInt::operator*=(LargeInt const& a){
+void sel::LargeInt::operator*=(LargeInt const& a){
     std::vector<unsigned int> b(1);
     b[0] = 0;
 
@@ -628,14 +627,14 @@ void ael::LargeInt::operator*=(LargeInt const& a){
 }
 
 //Product
-ael::LargeInt ael::LargeInt::operator*(LargeInt const& a){
+sel::LargeInt sel::LargeInt::operator*(LargeInt const& a){
     LargeInt b(*this);
     b *= a;
     return b;
 }
 
 //Product very slow
-void ael::LargeInt::RussianMultiplication(LargeInt const& a, LargeInt const& b){
+void sel::LargeInt::RussianMultiplication(LargeInt const& a, LargeInt const& b){
     LargeInt result(0), zero(0), x(0), y(0), aa(a), bb(b);
 
     if(aa > bb){
@@ -658,7 +657,7 @@ void ael::LargeInt::RussianMultiplication(LargeInt const& a, LargeInt const& b){
 }
 
 //Assignment by remainder
-void ael::LargeInt::operator%=(LargeInt const &a){
+void sel::LargeInt::operator%=(LargeInt const &a){
 
     LargeInt gamma(a), n(0), alpha(1), beta(0), reste(0), aa(*this), bb(a), buffer(0), reste2(0), un(1), zero(0);
 
@@ -728,17 +727,17 @@ void ael::LargeInt::operator%=(LargeInt const &a){
 }
 
 //Reminder
-ael::LargeInt ael::LargeInt::operator%(LargeInt const& a){
+sel::LargeInt sel::LargeInt::operator%(LargeInt const& a){
     LargeInt b(*this);
     b %= a;
     return b;
 }
 
 //Modular Exponentiation
-void ael::LargeInt::Modular_Exp(LargeInt& exposant, LargeInt& modulo){
+void sel::LargeInt::Modular_Exp(LargeInt& exposant, LargeInt& modulo){
     LargeInt result(1), base2(*this), base3(base2), modulo2(modulo), nul(0);
 
-    for(ael::LargeInt exposant2(exposant); exposant2 > nul; exposant2.ToTheRight()){
+    for(sel::LargeInt exposant2(exposant); exposant2 > nul; exposant2.ToTheRight()){
         if((exposant2.nombre[0] & 0x1) > 0){
             result *= base2;
 

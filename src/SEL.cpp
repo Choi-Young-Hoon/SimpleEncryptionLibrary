@@ -2,22 +2,22 @@
  *
  * Copyright 2013-2016 informaticien77
  *
- * This file is part of Advanced Encryption Library.
+ * This file is part of Simple Encryption Library.
  *
- * Advanced Encryption Library is free software: you can redistribute it and/or modify
+ * Simple Encryption Library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Advanced Encryption Library is distributed in the hope that it will be useful,
+ * Simple Encryption Library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Advanced Encryption Library.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Simple Encryption Library.  If not, see <http://www.gnu.org/licenses/>.
  *
- * 				AEL.cpp
+ * 				SEL.cpp
  *
  * Author: informaticien77
  * Release date: 27th of June 2014
@@ -25,11 +25,11 @@
  * ****************************************************************************
  */
 
-#include "AEL.hpp"
+#include "SEL.hpp"
 
 //Number generator with specified bit-length
-void ael::LargeInt::BitGenerator(unsigned int lenght){
-    ael::LargeInt maxi(0x01), mini(0x0), un(0x01), result(0x0);
+void sel::LargeInt::BitGenerator(unsigned int lenght){
+    sel::LargeInt maxi(0x01), mini(0x0), un(0x01), result(0x0);
 
     for(unsigned int k = 0; k < lenght; k++){
         maxi.ToTheLeft();
@@ -44,8 +44,8 @@ void ael::LargeInt::BitGenerator(unsigned int lenght){
 }
 
 //Fermat Primality Test
-bool ael::LargeInt::FermatPrimality(void){
-    ael::LargeInt bb(*this), un(1), p(bb), two(2), three(3), five(5), seven(7);
+bool sel::LargeInt::FermatPrimality(void){
+    sel::LargeInt bb(*this), un(1), p(bb), two(2), three(3), five(5), seven(7);
     p -= un;
 
     two.Modular_Exp(p, bb);
@@ -72,8 +72,8 @@ bool ael::LargeInt::FermatPrimality(void){
 }
 
 //Euclide Algorithm to calculate PGCD
-ael::LargeInt ael::LargeInt::EuclideAlgoPGCD(ael::LargeInt& b){
-    ael::LargeInt reste(1), aa(*this), bb(b), zero(0), un(1);
+sel::LargeInt sel::LargeInt::EuclideAlgoPGCD(sel::LargeInt& b){
+    sel::LargeInt reste(1), aa(*this), bb(b), zero(0), un(1);
     while(reste != zero){
         reste = aa;
         reste %= bb;
@@ -91,8 +91,8 @@ ael::LargeInt ael::LargeInt::EuclideAlgoPGCD(ael::LargeInt& b){
 }
 
 //Miller-Rabin Primality Test
-bool ael::LargeInt::MillerRabinPrimality(unsigned int iterations){
-    ael::LargeInt n1(*this), un(1), n2(0), s(0), d(0), a(0), c1(0), c2(0), r(0), s2(0), e(0), zero(0), plusa(0xFFFFF), deux(2), b(0), n0(n1);
+bool sel::LargeInt::MillerRabinPrimality(unsigned int iterations){
+    sel::LargeInt n1(*this), un(1), n2(0), s(0), d(0), a(0), c1(0), c2(0), r(0), s2(0), e(0), zero(0), plusa(0xFFFFF), deux(2), b(0), n0(n1);
     bool status = false;
     n1 -= un;
     n2 = n1;
@@ -139,7 +139,7 @@ bool ael::LargeInt::MillerRabinPrimality(unsigned int iterations){
         }
 
         e = d;
-        for(ael::LargeInt r(0); r < s; r += un){
+        for(sel::LargeInt r(0); r < s; r += un){
             c2 = a;
             e.ToTheLeft();
 
@@ -158,7 +158,7 @@ bool ael::LargeInt::MillerRabinPrimality(unsigned int iterations){
     return status;
 }
 
-ael::LargeInt ael::Karatsuba(ael::LargeInt& N, ael::LargeInt& M){
+sel::LargeInt sel::Karatsuba(sel::LargeInt& N, sel::LargeInt& M){
     unsigned int k = 0, aka = 0;
 
     if (N < M){
@@ -170,13 +170,13 @@ ael::LargeInt ael::Karatsuba(ael::LargeInt& N, ael::LargeInt& M){
         aka = N.size();
     }
 
-    ael::LargeInt a(0), b(0), c(0), d(0), P1(0), P2(0), P3(0), A(0), B(0), S(0), zero(0), S1(0), S2(0), atemp(0), ctemp(0);
+    sel::LargeInt a(0), b(0), c(0), d(0), P1(0), P2(0), P3(0), A(0), B(0), S(0), zero(0), S1(0), S2(0), atemp(0), ctemp(0);
 
     if ((k == 0) || (N == zero) || (M == zero)){
         return(S);
     }
     else if(aka <= 16){
-        ael::LargeInt result(N.GetFirst()*M.GetFirst());
+        sel::LargeInt result(N.GetFirst()*M.GetFirst());
         //result = N;
         //result *= M;
         return(result);
@@ -208,14 +208,14 @@ ael::LargeInt ael::Karatsuba(ael::LargeInt& N, ael::LargeInt& M){
         P1 = zero;
     }
     else{
-        P1 = ael::Karatsuba(a,c);
+        P1 = sel::Karatsuba(a,c);
     }
 
     if((b == zero) || (d == zero)){
         P2 = zero;
     }
     else{
-        P2 = ael::Karatsuba(b,d);
+        P2 = sel::Karatsuba(b,d);
     }
 
     int factor = -1;
@@ -226,7 +226,7 @@ ael::LargeInt ael::Karatsuba(ael::LargeInt& N, ael::LargeInt& M){
         if(c > d){
             S2 = c;
             S2 -= d;
-            P3 = ael::Karatsuba(S1,S2);
+            P3 = sel::Karatsuba(S1,S2);
             factor = -1;
         }
         else if(c == d){
@@ -237,7 +237,7 @@ ael::LargeInt ael::Karatsuba(ael::LargeInt& N, ael::LargeInt& M){
         else{
             S2 = d;
             S2 -= c;
-            P3 = ael::Karatsuba(S1,S2);
+            P3 = sel::Karatsuba(S1,S2);
             factor = 1;
         }
     }
@@ -247,7 +247,7 @@ ael::LargeInt ael::Karatsuba(ael::LargeInt& N, ael::LargeInt& M){
         if(c >= d){
             S2 = c;
             S2 -= d;
-            P3 = ael::Karatsuba(S1,S2);
+            P3 = sel::Karatsuba(S1,S2);
             factor = 1;
         }
         else if(c == d){
@@ -258,7 +258,7 @@ ael::LargeInt ael::Karatsuba(ael::LargeInt& N, ael::LargeInt& M){
         else{
             S2 = d;
             S2 -= c;
-            P3 = ael::Karatsuba(S1,S2);
+            P3 = sel::Karatsuba(S1,S2);
             factor = -1;
         }
     }

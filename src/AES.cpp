@@ -1,21 +1,21 @@
 /* ****************************************************************************
  *
- * Copyright 2013, 2014 informaticien77
+ * Copyright 2013-2016 informaticien77
  *
- * This file is part of Advanced Encryption Library.
+ * This file is part of Simple Encryption Library.
  *
- * Advanced Encryption Library is free software: you can redistribute it and/or modify
+ * Simple Encryption Library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Advanced Encryption Library is distributed in the hope that it will be useful,
+ * Simple Encryption Library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Advanced Encryption Library.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Simple Encryption Library.  If not, see <http://www.gnu.org/licenses/>.
  *
  * 				AES.cpp
  *
@@ -25,7 +25,7 @@
  * ****************************************************************************
  */
 
-#include "AEL.hpp"
+#include "SEL.hpp"
 
 //Private functions of the Advanced Encryption Standard (AES) algorithm.
 
@@ -1235,11 +1235,11 @@ void AESDecrypt(const u32 *rk, int nrounds, const u8 ciphertext[16], u8 plaintex
 
 //Public functions of the Advanced Encryption Standard (AES) algorithm.
 
-ael::AES::AES(){
+sel::AES::AES(){
     aes_key = "";
 }
 
-ael::AES::AES(std::string key){
+sel::AES::AES(std::string key){
     if(key.size() == 16){
         aes_key = key;
     }
@@ -1254,7 +1254,7 @@ ael::AES::AES(std::string key){
     }
 }
 
-void ael::AES::GenerateKey(int keybits){
+void sel::AES::GenerateKey(int keybits){
     //std::srand(time(NULL));
 	aes_key = "";
 	int i = 0;
@@ -1263,7 +1263,7 @@ void ael::AES::GenerateKey(int keybits){
 	}
 }
 
-std::string ael::AES::Encrypt(std::string plaintext)
+std::string sel::AES::Encrypt(std::string plaintext)
 {
 	int tailletext = plaintext.length();
 
@@ -1311,7 +1311,7 @@ std::string ael::AES::Encrypt(std::string plaintext)
     return(str);
 }
 
-std::string ael::AES::Decrypt(std::string text)
+std::string sel::AES::Decrypt(std::string text)
 {
     const unsigned char ciphertextt[16] = {text[0],text[1],text[2],text[3],text[4],text[5],text[6],text[7],text[8],text[9],text[10],text[11],text[12],text[13],text[14],text[15]};
     unsigned char finale[16] = {0};
