@@ -33,15 +33,24 @@ sel::LargeInt::LargeInt(){
     nombre.clear();
 }
 
-//Vector of unsigned int to LargeInt
-sel::LargeInt::LargeInt(std::vector<unsigned int> a){
+//Vector of uint32 to LargeInt
+sel::LargeInt::LargeInt(std::vector<uint32_t> &a){
     nombre = a;
 }
 
-//String to LargeInt
+//String in hexadecimal to LargeInt
 sel::LargeInt::LargeInt(std::string a){
-    sel::LargeInt b((unsigned char *)a.c_str(), a.size());
-    nombre.swap(b.nombre);
+    std::reverse(a.begin(), a.end());
+
+    nombre.clear();
+
+    std::string current_number;
+
+    for(int i = 0; i < a.size(); i += 8){
+        current_number = a.substr(i, 8);
+        std::reverse(current_number.begin(), current_number.end());
+        nombre.push_back(std::strtoul(current_number.c_str(), 0, 16));
+    }
 }
 
 //Init the random function
@@ -50,25 +59,25 @@ void sel::randinit(void){
 }
 
 //Get the bit in the position wanted
-bool sel::LargeInt::getbit(unsigned int position){
-    unsigned int posblock = position << 5, posbit = position % 32;
-    unsigned int block = nombre[posblock], posfinal = 0x01;
-    posfinal = posfinal << posbit;
+bool sel::LargeInt::getbit(const uint32_t position){
+    uint32_t posblock = position << 5, posbit = position % 32;
+    uint32_t block = nombre[posblock], posfinal = 0x01;
+    posfinal <<= posbit;
     return((posfinal & block) > 0);
 }
 
 //Set a bit value
-void sel::LargeInt::setbit(bool bit, unsigned int position){
-    unsigned int posblock = position / 32, posbit = position % 32;
-    unsigned int block = nombre[posblock];
-    if (bit){
-        unsigned int posfinal = 0x01;
-        posfinal = posfinal << posbit;
+void sel::LargeInt::setbit(const bool bit, const uint32_t position){
+    uint32_t posblock = position >> 5, posbit = position % 32;
+    uint32_t block = nombre[posblock];
+
+    uint32_t posfinal = 0x01;
+    posfinal = posfinal << posbit;
+
+    if(bit){
         nombre[posblock] = block | posfinal;
     }
     else{
-        unsigned int posfinal = 0x01;
-        posfinal = posfinal << posbit;
         posfinal = ~posfinal;
         nombre[posblock] = block & posfinal;
     }
@@ -79,11 +88,11 @@ void sel::LargeInt::setbit(bool bit, unsigned int position){
 }
 
 //Size
-unsigned int sel::LargeInt::size(){
+uint_fast32_t sel::LargeInt::size(){
 
-    unsigned int l = this->nombre.size();
+    uint_fast32_t l = this->nombre.size();
 
-    unsigned int last = this->nombre[l-1];
+    uint_fast32_t last = this->nombre[l-1];
 
     if (last == 0){
         return 0;
@@ -91,7 +100,7 @@ unsigned int sel::LargeInt::size(){
 
     l >> 5;
 
-    for (unsigned int i=0x80000000; i>0; i=i>>1){
+    for (uint_fast32_t i=0x80000000; i>0; i=i>>1){
         if((last & i) > 0){
             break;
         }
@@ -112,10 +121,10 @@ sel::LargeInt::LargeInt(unsigned char a[], unsigned int size){
     for(unsigned int i = 0; i < taille; i++){
         nombre[i] = 0;
 		for(unsigned int j = 0; j < 4; j++){
-			h = i*4 + j;
+			h = i<<2 + j;
 			if(h < size){
-				h = a[i*4+j];
-				h <<= (j*8);
+				h = a[h];
+				h <<= (j<<3);
 				nombre[i] += h;
 			}
 		}
@@ -205,8 +214,8 @@ std::string sel::LargeInt::as64String(void){
     return d;
 }
 
-std::vector<unsigned int> sel::LargeInt::asVector(void){
-    std::vector<unsigned int> a_copy;
+std::vector<uint32_t> sel::LargeInt::asVector(void){
+    std::vector<uint32_t> a_copy;
     a_copy = this->nombre;
     return a_copy;
 }
@@ -283,7 +292,6 @@ void sel::LargeInt::Generate(unsigned int taille){
 void sel::LargeInt::NumberGenerator(LargeInt& maxi, LargeInt& mini){
     unsigned int integerlenght = 0, extrasize = 1, filter = 0, random = 0;
     bool start = true;
-    //srand(time(NULL));
 
     if(maxi.nombre.size() == mini.nombre.size()){
         integerlenght = maxi.nombre.size();
@@ -427,54 +435,54 @@ sel::LargeInt& sel::LargeInt::operator=(LargeInt const& a){
 
 //Assignment by sum
 void sel::LargeInt::operator+=(LargeInt const& a){
-    unsigned int long long buffer = 0, memento = 0;
-    unsigned int diff = 0, quit = 0, i = 0;
-    std::vector<unsigned int> b(0);
+    uint64_t buffer = 0, memento = 0;
+    uint32_t diff = 0, quit = 0, i = 0;
+    std::vector<uint32_t> b(0);
 
     while(quit == 0){
         if(i >= nombre.size()){
             if(i < a.nombre.size()){
-                buffer = static_cast<unsigned int long long>(a.nombre[i]) + memento;
+                buffer = static_cast<uint64_t>(a.nombre[i]) + memento;
                 if(buffer > 0xFFFFFFFF){
-                    b.push_back(static_cast<unsigned int>(buffer & 0xFFFFFFFF));
+                    b.push_back(static_cast<uint32_t>(buffer & 0xFFFFFFFF));
                     memento = buffer;
                     memento >>= 32;
                 }
                 else{
-                    b.push_back(static_cast<unsigned int>(buffer));
+                    b.push_back(static_cast<uint32_t>(buffer));
                     memento = 0;
                 }
             }
             else{
                 if(memento != 0){
-                    b.push_back(static_cast<unsigned int>(memento));
+                    b.push_back(static_cast<uint32_t>(memento));
                 }
                 quit = 1;
             }
         }
         else{
             if(i < a.nombre.size()){
-                buffer = (static_cast<unsigned int long long>(nombre[i]) + static_cast<unsigned int long long>(a.nombre[i]) + memento);
+                buffer = (static_cast<uint64_t>(nombre[i]) + static_cast<uint64_t>(a.nombre[i]) + memento);
                 if(buffer > 0xFFFFFFFF){
-                    diff = static_cast<unsigned int>(buffer & 0xFFFFFFFF);
+                    diff = static_cast<uint32_t>(buffer & 0xFFFFFFFF);
                     b.push_back(diff);
                     memento = buffer;
                     memento >>= 32;
                 }
                 else{
-                    b.push_back(static_cast<unsigned int>(buffer));
+                    b.push_back(static_cast<uint32_t>(buffer));
                     memento = 0;
                 }
             }
             else{
-                buffer = static_cast<unsigned int long long>(nombre[i]) + memento;
+                buffer = static_cast<uint64_t>(nombre[i]) + memento;
                 if(buffer > 0xFFFFFFFF){
-                    b.push_back((static_cast<unsigned int>(buffer & 0xFFFFFFFF)));
+                    b.push_back((static_cast<uint32_t>(buffer & 0xFFFFFFFF)));
                     memento = buffer;
                     memento >>= 32;
                 }
                 else{
-                    b.push_back(static_cast<unsigned int>(buffer));
+                    b.push_back(static_cast<uint32_t>(buffer));
                     memento = 0;
                 }
             }
@@ -495,9 +503,9 @@ sel::LargeInt sel::LargeInt::operator+(LargeInt const& a){
 //Assignment by difference
 //Result must be positive
 void sel::LargeInt::operator-=(LargeInt const& a){
-    unsigned int quit = 0, i = 0, memento = 0;
-    std::vector<unsigned int> b(0);
-    unsigned int long long buffer = 0x100000000;
+    uint_fast32_t quit = 0, i = 0, memento = 0;
+    std::vector<uint32_t> b(0);
+    uint_fast64_t buffer = 0x100000000;
 
     if(nombre == a.nombre){
         nombre.resize(1);
@@ -532,10 +540,10 @@ void sel::LargeInt::operator-=(LargeInt const& a){
                     }
                 }
                 else{
-                    buffer += static_cast<unsigned int long long>(nombre[i]);
-                    buffer -= static_cast<unsigned int long long>(a.nombre[i]);
-                    buffer -= static_cast<unsigned int long long>(memento);
-                    b.push_back(static_cast<unsigned int>(buffer));
+                    buffer += static_cast<uint_fast64_t>(nombre[i]);
+                    buffer -= static_cast<uint_fast64_t>(a.nombre[i]);
+                    buffer -= static_cast<uint_fast64_t>(memento);
+                    b.push_back(static_cast<uint_fast32_t>(buffer));
                     memento = 1;
                     buffer = 0x100000000;
                 }
@@ -575,26 +583,26 @@ sel::LargeInt sel::LargeInt::operator-(LargeInt const& a){
 
 //Assignment by product
 void sel::LargeInt::operator*=(LargeInt const& a){
-    std::vector<unsigned int> b(1);
+    std::vector<uint32_t> b(1);
     b[0] = 0;
 
-    unsigned int maxi = 1;
-    unsigned int long long buffer = 0, buffer2 = 0, buffer3 = 0;
-    for(unsigned int i = 0; i < a.nombre.size(); i++){
-        for(unsigned int j = 0; j < nombre.size(); j++){
+    uint32_t maxi = 1;
+    uint64_t buffer = 0, buffer2 = 0, buffer3 = 0;
+    for(uint32_t i = 0; i < a.nombre.size(); i++){
+        for(uint32_t j = 0; j < nombre.size(); j++){
             if((i+j+1) >= maxi){
                 b.push_back(0);
                 maxi++;
             }
-            buffer = (static_cast<unsigned int long long>(nombre[j]) * static_cast<unsigned int long long>(a.nombre[i])) + static_cast<unsigned int long long>(b[j+i]);
+            buffer = (static_cast<uint64_t>(nombre[j]) * static_cast<uint64_t>(a.nombre[i])) + static_cast<uint64_t>(b[j+i]);
 
-            b[j+i] = static_cast<unsigned int>(buffer & 0xFFFFFFFF);
+            b[j+i] = static_cast<uint32_t>(buffer & 0xFFFFFFFF);
 
             buffer >>= 32;
 
-            buffer2 = (static_cast<unsigned int long long>(b[j+i+1]) + buffer + buffer3);
+            buffer2 = (static_cast<uint64_t>(b[j+i+1]) + buffer + buffer3);
 
-            b[j+i+1] = static_cast<unsigned int>(buffer2 & 0xFFFFFFFF);
+            b[j+i+1] = static_cast<uint32_t>(buffer2 & 0xFFFFFFFF);
 
             buffer2 >>= 32;
 
@@ -612,7 +620,7 @@ void sel::LargeInt::operator*=(LargeInt const& a){
                 b[b.size()-1] += buffer3;
             }
             else{
-                b.push_back(static_cast<unsigned int>(buffer3));
+                b.push_back(static_cast<uint32_t>(buffer3));
             }
         }
         buffer3 = 0;

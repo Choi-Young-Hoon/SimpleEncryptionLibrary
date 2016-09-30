@@ -38,6 +38,7 @@
 #include <vector>
 #include <iomanip>
 #include <sstream>
+#include <algorithm>
 
 namespace sel
 {
@@ -61,8 +62,8 @@ namespace sel
 	{
 	public:
 		LargeInt();
-		LargeInt(std::vector<unsigned int> a);
 		LargeInt(std::string a);
+		LargeInt(std::vector<uint32_t> &a);
 		LargeInt(unsigned char a[], unsigned int size);
 		LargeInt(LargeInt const& a);
 		LargeInt(unsigned int a);
@@ -70,7 +71,7 @@ namespace sel
 
 		const void Show();
 		std::string as64String(void);
-		std::vector<unsigned int> asVector(void);
+		std::vector<uint32_t> asVector(void);
 
 		void RussianMultiplication(LargeInt const& a, LargeInt const& b);
 		void Modular_Exp(LargeInt& exposant, LargeInt& modulo);
@@ -85,10 +86,10 @@ namespace sel
 		void ToTheLeft();
 		void Generate(unsigned int taille);
 		unsigned int GetFirst();
-		unsigned int size();
+		uint_fast32_t size();
 
-		bool getbit(unsigned int position);
-		void setbit(bool bit, unsigned int position);
+		bool getbit(const uint32_t position);
+		void setbit(const bool bit, const uint32_t position);
 
 		bool operator==(LargeInt const& a);
 		bool operator!=(LargeInt const& a);
@@ -112,7 +113,7 @@ namespace sel
 		LargeInt operator%(LargeInt const& a);
 
 	private:
-		std::vector<unsigned int> nombre;
+		std::vector<uint32_t> nombre;
 	};
 
 	class MD5
@@ -123,6 +124,7 @@ namespace sel
         std::string asString(void);
         std::string asHexString(void);
         std::vector<unsigned int> asVector(void);
+
     private:
         std::vector<unsigned int> text_digest;
 	};

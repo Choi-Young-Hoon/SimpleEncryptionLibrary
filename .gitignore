@@ -4,3 +4,4 @@ Makefile
 *.cbp
 CMakeFiles/*
 CMakeCache.txt
+*.layout

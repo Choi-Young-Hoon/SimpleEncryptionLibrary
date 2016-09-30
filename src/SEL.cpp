@@ -29,7 +29,7 @@
 
 //Number generator with specified bit-length
 void sel::LargeInt::BitGenerator(unsigned int lenght){
-    sel::LargeInt maxi(0x01), mini(0x0), un(0x01), result(0x0);
+    sel::LargeInt maxi(1), mini(0), un(1), result(0);
 
     for(unsigned int k = 0; k < lenght; k++){
         maxi.ToTheLeft();

@@ -134,6 +134,29 @@ int main(){
 			std::cout << "FAILED" << std::endl;
 		}
 
+		//Test LargeInt class arithmetic
+		std::cout << "Checking arithmetic operations" << std::endl;
+
+		sel::LargeInt biginteger1("AF5263DED1648973"), biginteger2("1654973F1654328B");
+
+		sel::LargeInt bigintegersum = biginteger1 + biginteger2, bigintegersumresult("C5A6FB1DE7B8BBFE");
+
+		if(bigintegersum == bigintegersumresult){
+            std::cout << "Sum CHECKED" << std::endl;
+		}
+		else{
+            std::cout << "Sum FAILED" << std::endl;
+		}
+
+		sel::LargeInt bigintegerdiff = biginteger1 - biginteger2, bigintegerdiffresult("98FDCC9FBB1056E8");
+
+		if(bigintegerdiff == bigintegerdiffresult){
+            std::cout << "Diff CHECKED" << std::endl;
+		}
+		else{
+            std::cout << "Diff FAILED" << std::endl;
+		}
+
         //Test the Diffie-Hellman Key Exchange algorithm
 		std::cout << "Diffie-Hellman Key Exchange : ";
 
