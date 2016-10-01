@@ -1,5 +1,5 @@
-Advanced Encryption Library
-===========================
+Simple Encryption Library
+=========================
 
 MD5
 ---
@@ -12,7 +12,7 @@ But, it's NOT SAFE to use it for cryptographic applications.
 How to use it ?
 
     //To find the hash of "Hello world !"
-    ael::MD5 md5_hash("Hello world !");
+    sel::MD5 md5_hash("Hello world !");
     
     //To convert the MD5 hash to a string
     std::string md5_char = md5_hash.asString();

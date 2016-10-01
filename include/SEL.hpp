@@ -116,6 +116,9 @@ namespace sel
 		std::vector<uint32_t> nombre;
 	};
 
+	/*
+	 * Class MD5 : Message Digest 5
+	 */
 	class MD5
 	{
     public:
@@ -127,6 +130,18 @@ namespace sel
 
     private:
         std::vector<unsigned int> text_digest;
+	};
+
+	/*
+	 * Class CRC1 : Cyclic Redundancy Check 1 bit
+	 */
+	class CRC1
+	{
+	public:
+        CRC1(const std::string data);
+        bool result(void);
+    private:
+        bool crc1_hash;
 	};
 
     void randinit(void);

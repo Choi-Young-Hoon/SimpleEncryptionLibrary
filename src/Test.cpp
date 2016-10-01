@@ -76,10 +76,13 @@ int main(){
 		std::cout << "Test program of SEL launched ..." << std::endl << std::endl;
 
 		//License information
-		std::cout << "This program and all source files of the Simple Encryption Library are under the Lesser General Public License (LGPL). See COPYING and LESSER.COPYING files which you should have with the source code." << std::endl << std::endl;
+		std::cout << "This project is licensed under the terms of the MIT license." << std::endl << std::endl;
 
         //Random generators initialization
         sel::randinit();
+
+        //Checking all algorithms
+        std::cout << "Checking all algorithms" << std::endl << std::endl;
 
 		//Test the AES-128Bits algorithm
 		std::cout << "AES 128 Bits : ";
@@ -89,7 +92,7 @@ int main(){
 		std::string decrypt128 = key_aes_128.Decrypt(encrypt128);
 
 		if(decrypt128 == "Test program ..."){
-			std::cout << "OK" << std::endl;
+			std::cout << "CHECKED" << std::endl;
 		}
 		else{
 			std::cout << "FAILED" << std::endl;
@@ -103,7 +106,7 @@ int main(){
 		std::string decrypt192 = key_aes_192.Decrypt(encrypt192);
 
 		if(decrypt192 == "Test program ..."){
-			std::cout << "OK" << std::endl;
+			std::cout << "CHECKED" << std::endl;
 		}
 		else{
 			std::cout << "FAILED" << std::endl;
@@ -117,7 +120,7 @@ int main(){
 		std::string decrypt256 = key_aes_256.Decrypt(encrypt256);
 
 		if(decrypt256 == "Test program ..."){
-			std::cout << "OK" << std::endl;
+			std::cout << "CHECKED" << std::endl;
 		}
 		else{
 			std::cout << "FAILED" << std::endl;
@@ -127,33 +130,52 @@ int main(){
 		std::cout << "MD5 : ";
 		sel::MD5 md5("Hello world !");
 		if(md5.asHexString() == "67c18d060479c5d867c9b91c80edeb4c"){
-			std::cout << "OK" << std::endl;
+			std::cout << "CHECKED" << std::endl;
+		}
+		else{
+			std::cout << "FAILED" << std::endl;
+		}
+
+		//Test the CRC-1 algorithm
+		std::cout << "CRC-1 : ";
+		sel::CRC1 crc1("Hello world !");
+		if(crc1.result() == true){
+			std::cout << "CHECKED" << std::endl;
 		}
 		else{
 			std::cout << "FAILED" << std::endl;
 		}
 
 		//Test LargeInt class arithmetic
-		std::cout << "Checking arithmetic operations" << std::endl;
+		std::cout << std::endl << "Checking arithmetic operations" << std::endl << std::endl;
 
 		sel::LargeInt biginteger1("AF5263DED1648973"), biginteger2("1654973F1654328B");
 
 		sel::LargeInt bigintegersum = biginteger1 + biginteger2, bigintegersumresult("C5A6FB1DE7B8BBFE");
 
 		if(bigintegersum == bigintegersumresult){
-            std::cout << "Sum CHECKED" << std::endl;
+            std::cout << "Addition : CHECKED" << std::endl;
 		}
 		else{
-            std::cout << "Sum FAILED" << std::endl;
+            std::cout << "Addition : FAILED" << std::endl;
 		}
 
-		sel::LargeInt bigintegerdiff = biginteger1 - biginteger2, bigintegerdiffresult("98FDCC9FBB1056E8");
+		sel::LargeInt bigintegersub = biginteger1 - biginteger2, bigintegersubresult("98FDCC9FBB1056E8");
 
-		if(bigintegerdiff == bigintegerdiffresult){
-            std::cout << "Diff CHECKED" << std::endl;
+		if(bigintegersub == bigintegersubresult){
+            std::cout << "Subtraction : CHECKED" << std::endl;
 		}
 		else{
-            std::cout << "Diff FAILED" << std::endl;
+            std::cout << "Subtraction : FAILED" << std::endl;
+		}
+
+		sel::LargeInt bigintegermul = biginteger1 * biginteger2, bigintegermulresult("F4B0332B895186004E5BFFB502B1771");
+
+		if(bigintegermul == bigintegermulresult){
+            std::cout << "Multiplication : CHECKED" << std::endl;
+		}
+		else{
+            std::cout << "Multiplication : FAILED" << std::endl;
 		}
 
         //Test the Diffie-Hellman Key Exchange algorithm
@@ -170,5 +192,4 @@ int main(){
 		std::getchar();
 
         return 0;
-
 }

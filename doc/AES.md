@@ -1,12 +1,12 @@
-Advanced Encryption Library
-===========================
+Simple Encryption Library
+=========================
 
 AES
 ---
 
 You can use the Advanced Encryption Standard algorithm by using 3 different functions provide by AEL.
 
-*   `ael::AES key_aes;`
+*   `sel::AES key_aes;`
 This create a empty key to use with AES.
 
 *   `key_aes.GenerateKey(int keybits);`
@@ -24,7 +24,7 @@ General example :
     #include "AEL.hpp"
     
     int main(){
-		ael::AES key_aes;
+		sel::AES key_aes;
         key_aes.GenerateKey(128);
         std::string encrypt = key_aes.Encrypt("Test program ...");
         std::string decrypt = key_aes.Decrypt(encrypt);

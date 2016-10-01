@@ -14,6 +14,7 @@ Implemented algorithms
 * AES-192
 * AES-256
 * MD5 [RFC_1321] [RFC_6151]
+* CRC-1
 
 In progress
 -----------

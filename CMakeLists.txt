@@ -37,6 +37,8 @@ file(
 
 		src/MD5.cpp
 
+		src/CRC.cpp
+
 		include/SEL.hpp
 
 )
