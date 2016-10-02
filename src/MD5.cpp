@@ -27,30 +27,29 @@
 
 #include "SEL.hpp"
 
-unsigned int md5_rotate_left(unsigned int x, unsigned int n) {
+uint32_t md5_rotate_left(uint32_t x, uint32_t n){
   return ((x << n) | (x >> (32-n)));
 }
 
 sel::MD5::MD5(const std::string text){
     //Note: All variables are unsigned 32 bit and wrap modulo 2^32 when calculating
-    std::vector<unsigned int> message;
-    unsigned int lengthMessage[2];
+    std::vector<uint32_t> message;
+    uint32_t lengthMessage[2];
 
     if(text.size() > 0){
         message.resize(ceil(text.size() / 4.0));
 
-        unsigned int tempo = 0x00;
-        for(unsigned int z = 0; z < message.size(); z++){
+        uint32_t tempo = 0x00;
+        for(uint32_t z = 0; z < message.size(); z++){
             message[z] = 0x00;
-            for(unsigned int y = 0; (y < 4) && ((y+4*z) < text.size()); y++){
-                tempo = text[y+4*z];
-                message[z] = (message[z] | (tempo <<= y*8));
+            for(uint8_t y = 0; (y < 4) && ((y+(z<<2)) < text.size()); y++){
+                tempo = text[(z<<2) + y];
+                message[z] = (message[z] | (tempo <<= (y << 3)));
             }
         }
 
-        unsigned int long long length = (text.size() * 8) & 0xFFFFFFFFFFFFFFFF;
-        lengthMessage[0] = static_cast<unsigned int>(length & 0xFFFFFFFF);
-        lengthMessage[1] = static_cast<unsigned int>(length >>= 32);
+        lengthMessage[0] = text.size() << 3;
+        lengthMessage[1] = text.size() >> 29;
     }
     else{
         message.resize(1);
@@ -60,13 +59,13 @@ sel::MD5::MD5(const std::string text){
     }
 
     //r specifies the per-round shift amounts
-    unsigned int r[64] = {
+    uint8_t r[64] = {
         7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
         5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
         4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
         6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21};
 
-    unsigned int k[64] = { 0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee
+    uint32_t k[64] = { 0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee
         ,0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501
         ,0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be
         ,0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821
@@ -84,10 +83,10 @@ sel::MD5::MD5(const std::string text){
         ,0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391 };
 
     //Initialize variables
-    unsigned int h0 = 0x67452301, h1 = 0xefcdab89, h2 = 0x98badcfe, h3 = 0x10325476;
+    uint32_t h0 = 0x67452301, h1 = 0xefcdab89, h2 = 0x98badcfe, h3 = 0x10325476;
 
     //Pre-processing: adding a single 1 bit
-    unsigned int test = 0x80, mes = 0xff;
+    uint32_t test = 0x80, mes = 0xff;
     while((mes & message[message.size()-1]) != 0){
         test <<= 8;
         mes <<= 8;
@@ -106,16 +105,15 @@ sel::MD5::MD5(const std::string text){
     }
 
     message.push_back(lengthMessage[0]);
-
     message.push_back(lengthMessage[1]);
 
-    unsigned int a, b, c, d, f, temp, g = 0, w[16];
+    uint32_t a, b, c, d, f, temp, g = 0, w[16];
 
     //Process the message in successive 512-bit chunks
-    for(unsigned int j = 0; j < (message.size() / 16); j++){
+    for(uint32_t j = 0; j < (message.size() / 16); j++){
 
-        for(unsigned int m = 0; m < 16; m++){
-            w[m] = message[m+j*16];
+        for(uint8_t m = 0; m < 16; m++){
+            w[m] = message[m + (j<<4)];
         }
 
         //Initialize hash value for this chunk
@@ -125,7 +123,7 @@ sel::MD5::MD5(const std::string text){
         d = h3;
 
         //Main loop
-        for(unsigned int l = 0; l < 64; l++){
+        for(uint8_t l = 0; l < 64; l++){
             if((l >= 0) && (l <= 15)){
                 f = ((b & c) | ((~b) & d)); //Round 1
                 g = l;
@@ -159,7 +157,7 @@ sel::MD5::MD5(const std::string text){
 
     }
 
-    unsigned int digest[4];
+    uint32_t digest[4];
     digest[0] = ((h0>>24)&0xff) | // move byte 3 to byte 0
                     ((h0<<8)&0xff0000) | // move byte 1 to byte 2
                     ((h0>>8)&0xff00) | // move byte 2 to byte 1
@@ -191,7 +189,7 @@ sel::MD5::MD5(const std::string text){
 
 std::string sel::MD5::asString(){
     std::string result = "";
-    for(unsigned int i = 0; i < text_digest.size(); i++){
+    for(uint32_t i = 0; i < text_digest.size(); i++){
         result += (text_digest[i] & 0xFF);
         result += ((text_digest[i] >>= 8) & 0xFF);
         result += ((text_digest[i] >>= 16) & 0xFF);
@@ -202,14 +200,14 @@ std::string sel::MD5::asString(){
 
 std::string sel::MD5::asHexString(){
     std::ostringstream ss;
-    for(unsigned int i = 0; i < text_digest.size(); i++){
+    for(uint32_t i = 0; i < text_digest.size(); i++){
         ss << std::setfill('0') << std::setw(8) << std::hex << text_digest[i];
     }
     return ss.str();
 }
 
-std::vector<unsigned int> sel::MD5::asVector(){
-    std::vector<unsigned int> result;
+std::vector<uint32_t> sel::MD5::asVector(){
+    std::vector<uint32_t> result;
     result = text_digest;
     return result;
 }

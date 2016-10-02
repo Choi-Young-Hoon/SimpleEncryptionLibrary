@@ -133,10 +133,10 @@ namespace sel
 
         std::string asString(void);
         std::string asHexString(void);
-        std::vector<unsigned int> asVector(void);
+        std::vector<uint32_t> asVector(void);
 
     private:
-        std::vector<unsigned int> text_digest;
+        std::vector<uint32_t> text_digest;
 	};
 
 	/*
