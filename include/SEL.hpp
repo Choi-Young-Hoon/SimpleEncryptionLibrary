@@ -45,10 +45,17 @@ namespace sel
 	class AES
 	{
 	public:
+        enum
+        {
+            AES128 = 128,
+            AES192 = 192,
+            AES256 = 256
+        };
+
 	    AES();
 	    AES(std::string key);
 
-		void GenerateKey(int keybits = 128);
+		void GenerateKey(int type = AES::AES128);
 
 		std::string Encrypt(std::string plaintext);
 		std::string Decrypt(std::string ciphertext);
@@ -140,9 +147,57 @@ namespace sel
 	public:
         CRC1(const std::string data);
         bool result(void);
+
     private:
-        bool crc1_hash;
+        bool crc_hash;
 	};
+
+	/*
+	 * Class CRC16 : Cyclic Redundancy Check 16 bits
+	 */
+	class CRC16
+	{
+	public:
+        enum
+        {
+            CRC16_IBM = 0,
+            CRC16_MODBUS = 1
+        };
+
+        CRC16(const std::string data, int type = CRC16::CRC16_IBM);
+        uint16_t crc_gen(std::string data, const uint16_t polynomial,
+            const uint16_t initial_value, const uint16_t final_value,
+            const bool input_reflected, const bool result_reflected);
+        uint16_t result(void);
+        uint16_t reversed16(uint16_t data);
+        uint8_t reversed8(uint8_t data);
+
+    private:
+        uint16_t crc_hash;
+	};
+
+	/*
+	 * Class CRC32 : Cyclic Redundancy Check 32 bits
+	 */
+    class CRC32
+    {
+    public:
+        enum
+        {
+            CRC32_NORMAL = 0
+        };
+
+        CRC32(const std::string data, int type = CRC32::CRC32_NORMAL);
+        uint32_t crc_gen(std::string data, const uint32_t polynomial,
+            const uint32_t initial_value, const uint32_t final_value,
+            const bool input_reflected, const bool result_reflected);
+        uint32_t result(void);
+        uint32_t reversed32(uint32_t data);
+        uint8_t reversed8(uint8_t data);
+
+    private:
+        uint32_t crc_hash;
+    };
 
     void randinit(void);
 	LargeInt Karatsuba(LargeInt& N, LargeInt& M);

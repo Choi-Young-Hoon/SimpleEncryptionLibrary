@@ -14,7 +14,9 @@ Implemented algorithms
 * AES-192
 * AES-256
 * MD5 [RFC_1321] [RFC_6151]
-* CRC-1
+* CRC-1 (bit parity)
+* CRC-16 (IBM and MODBUS)
+* CRC-32
 
 In progress
 -----------

@@ -1254,11 +1254,9 @@ sel::AES::AES(std::string key){
     }
 }
 
-void sel::AES::GenerateKey(int keybits){
-    //std::srand(time(NULL));
+void sel::AES::GenerateKey(int type){
 	aes_key = "";
-	int i = 0;
-	for(i = 0; i < (keybits/8); i++){
+	for(int i = 0; i < (type/8); i++){
 		aes_key += std::rand()%256;
 	}
 }

@@ -44,7 +44,7 @@ bool TestDiffieHellman(void){
         //p1.Generate(8);
         p2 += six;
         //p2.Generate(8);
-        std::cout << "ONE TURN" << std::endl;
+        //std::cout << "ONE TURN" << std::endl;
     }
 
     g.BitGenerator(64);
@@ -87,7 +87,7 @@ int main(){
 		//Test the AES-128Bits algorithm
 		std::cout << "AES 128 Bits : ";
 		sel::AES key_aes_128;
-		key_aes_128.GenerateKey(128);
+		key_aes_128.GenerateKey(sel::AES::AES128);
 		std::string encrypt128 = key_aes_128.Encrypt("Test program ...");
 		std::string decrypt128 = key_aes_128.Decrypt(encrypt128);
 
@@ -101,7 +101,7 @@ int main(){
 		//Test the AES-192Bits algorithm
 		std::cout << "AES 192 Bits : ";
 		sel::AES key_aes_192;
-		key_aes_192.GenerateKey(192);
+		key_aes_192.GenerateKey(sel::AES::AES192);
 		std::string encrypt192 = key_aes_192.Encrypt("Test program ...");
 		std::string decrypt192 = key_aes_192.Decrypt(encrypt192);
 
@@ -115,7 +115,7 @@ int main(){
 		//Test the AES-256Bits algorithm
 		std::cout << "AES 256 Bits : ";
 		sel::AES key_aes_256;
-		key_aes_256.GenerateKey(256);
+		key_aes_256.GenerateKey(sel::AES::AES256);
 		std::string encrypt256 = key_aes_256.Encrypt("Test program ...");
 		std::string decrypt256 = key_aes_256.Decrypt(encrypt256);
 
@@ -140,6 +140,35 @@ int main(){
 		std::cout << "CRC-1 : ";
 		sel::CRC1 crc1("Hello world !");
 		if(crc1.result() == true){
+			std::cout << "CHECKED" << std::endl;
+		}
+		else{
+			std::cout << "FAILED" << std::endl;
+		}
+
+		//Test the CRC-16 algorithm
+		std::cout << "CRC-16-IBM : ";
+		sel::CRC16 crc16("Hello world !", sel::CRC16::CRC16_IBM);
+		if(crc16.result() == 0x3A37){
+			std::cout << "CHECKED" << std::endl;
+		}
+		else{
+			std::cout << "FAILED" << std::endl;
+		}
+
+		std::cout << "CRC-16-MODBUS : ";
+		sel::CRC16 crc16_2("Hello world !", sel::CRC16::CRC16_MODBUS);
+		if(crc16_2.result() == 0xD134){
+			std::cout << "CHECKED" << std::endl;
+		}
+		else{
+			std::cout << "FAILED" << std::endl;
+		}
+
+		//Test the CRC-32 algorithm
+		std::cout << "CRC-32 : ";
+		sel::CRC32 crc32("Hello world !", sel::CRC32::CRC32_NORMAL);
+		if(crc32.result() == 0x070E2C40){
 			std::cout << "CHECKED" << std::endl;
 		}
 		else{
@@ -179,7 +208,7 @@ int main(){
 		}
 
         //Test the Diffie-Hellman Key Exchange algorithm
-		std::cout << "Diffie-Hellman Key Exchange : ";
+		/*std::cout << "Diffie-Hellman Key Exchange : ";
 
 		if(TestDiffieHellman()){
 			std::cout << "OK" << std::endl;
@@ -187,7 +216,7 @@ int main(){
 		else{
 			std::cout << "FAILED" << std::endl;
 		}
-
+        */
 		std::cout << "Press a touch to quit ..." << std::endl;
 		std::getchar();
 
