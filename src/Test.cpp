@@ -30,7 +30,6 @@
 bool TestDiffieHellman(void){
     sel::LargeInt p(0), g(0), A(0), B(0), a(0), b(0), s1(0), s2(0), one(1), two(2), six(6), p1(0), p2(0);
 
-    //ael::randinit();
     //p.BitGenerator(1024);
     p.Generate(4); //128 Bits
     p = p*six;
@@ -44,7 +43,7 @@ bool TestDiffieHellman(void){
         //p1.Generate(8);
         p2 += six;
         //p2.Generate(8);
-        //std::cout << "ONE TURN" << std::endl;
+        std::cout << "ONE TURN" << std::endl;
     }
 
     g.BitGenerator(64);
@@ -52,7 +51,6 @@ bool TestDiffieHellman(void){
     a.BitGenerator(384);
 
 	std::cout << "FOUND !" << std::endl;
-    //std::getchar();
 
     b.BitGenerator(384);
     A = g;
@@ -207,16 +205,25 @@ int main(){
             std::cout << "Multiplication : FAILED" << std::endl;
 		}
 
+		sel::LargeInt bigintegermod = biginteger1 % biginteger2, bigintegermodresult("13024125351727A6");
+
+		if(bigintegermul == bigintegermulresult){
+            std::cout << "Modulus : CHECKED" << std::endl;
+		}
+		else{
+            std::cout << "Modulus : FAILED" << std::endl;
+		}
+
         //Test the Diffie-Hellman Key Exchange algorithm
-		/*std::cout << "Diffie-Hellman Key Exchange : ";
+		std::cout << "Diffie-Hellman Key Exchange : ";
 
 		if(TestDiffieHellman()){
-			std::cout << "OK" << std::endl;
+			std::cout << "CHECKED" << std::endl;
 		}
 		else{
 			std::cout << "FAILED" << std::endl;
 		}
-        */
+
 		std::cout << "Press a touch to quit ..." << std::endl;
 		std::getchar();
 

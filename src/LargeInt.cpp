@@ -435,56 +435,58 @@ sel::LargeInt& sel::LargeInt::operator=(LargeInt const& a){
 
 //Assignment by sum
 void sel::LargeInt::operator+=(LargeInt const& a){
-    uint64_t buffer = 0, memento = 0;
-    uint32_t diff = 0, quit = 0, i = 0;
+    uint32_t buffer = 0, memento = 0;
+    uint8_t i = 0;
+    bool quit = false;
     std::vector<uint32_t> b(0);
 
-    while(quit == 0){
+    while(!quit){
         if(i >= nombre.size()){
             if(i < a.nombre.size()){
-                buffer = static_cast<uint64_t>(a.nombre[i]) + memento;
-                if(buffer > 0xFFFFFFFF){
-                    b.push_back(static_cast<uint32_t>(buffer & 0xFFFFFFFF));
-                    memento = buffer;
-                    memento >>= 32;
+                buffer = a.nombre[i] + memento;
+
+                if((buffer < a.nombre[i]) || (buffer < memento)){ //Overflow
+                    memento = 1;
                 }
                 else{
-                    b.push_back(static_cast<uint32_t>(buffer));
                     memento = 0;
                 }
+
+                b.push_back(buffer);
+
             }
             else{
                 if(memento != 0){
-                    b.push_back(static_cast<uint32_t>(memento));
+                    b.push_back(memento);
                 }
-                quit = 1;
+
+                quit = true;
             }
         }
         else{
             if(i < a.nombre.size()){
-                buffer = (static_cast<uint64_t>(nombre[i]) + static_cast<uint64_t>(a.nombre[i]) + memento);
-                if(buffer > 0xFFFFFFFF){
-                    diff = static_cast<uint32_t>(buffer & 0xFFFFFFFF);
-                    b.push_back(diff);
-                    memento = buffer;
-                    memento >>= 32;
+                buffer = nombre[i] + a.nombre[i] + memento;
+
+                if((buffer < nombre[i]) || (buffer < a.nombre[i]) || (buffer < memento)){ //Overflow
+                    memento = 1;
                 }
                 else{
-                    b.push_back(static_cast<uint32_t>(buffer));
                     memento = 0;
                 }
+
+                b.push_back(buffer);
             }
             else{
-                buffer = static_cast<uint64_t>(nombre[i]) + memento;
-                if(buffer > 0xFFFFFFFF){
-                    b.push_back((static_cast<uint32_t>(buffer & 0xFFFFFFFF)));
-                    memento = buffer;
-                    memento >>= 32;
+                buffer = nombre[i] + memento;
+
+                if((buffer < nombre[i]) || (buffer < memento)){
+                    memento = 1;
                 }
                 else{
-                    b.push_back(static_cast<uint32_t>(buffer));
                     memento = 0;
                 }
+
+                b.push_back(buffer);
             }
         }
 
@@ -503,9 +505,10 @@ sel::LargeInt sel::LargeInt::operator+(LargeInt const& a){
 //Assignment by difference
 //Result must be positive
 void sel::LargeInt::operator-=(LargeInt const& a){
-    uint_fast32_t quit = 0, i = 0, memento = 0;
+    uint32_t memento = 0, temp_sum = 0;
+    uint8_t i = 0;
+    bool quit = false;
     std::vector<uint32_t> b(0);
-    uint_fast64_t buffer = 0x100000000;
 
     if(nombre == a.nombre){
         nombre.resize(1);
@@ -513,39 +516,34 @@ void sel::LargeInt::operator-=(LargeInt const& a){
     }
     else{
 
-    while(quit == 0){
+    while(!quit){
         if(i >= nombre.size()){
             if(i < a.nombre.size()){
                 //Error
                 std::cout << "Error difference 1" <<std::endl;
-                //system("PAUSE");
             }
             else{
                 if(memento != 0){
                     b.push_back(memento);
                 }
-                quit = 1;
+                quit = true;
             }
         }
         else{
             if(i < a.nombre.size()){
-                if(nombre[i] > (a.nombre[i] + memento)){
-                    b.push_back((nombre[i] - a.nombre[i]) - memento);
-                    memento = 0;
-                }
-                else if(nombre[i] == (a.nombre[i] + memento)){
-                    b.push_back(0);
-                    if(memento != 0){
-                        memento = 0;
-                    }
+                b.push_back((nombre[i] - a.nombre[i]) - memento);
+                temp_sum = a.nombre[i] + memento;
+
+                if((temp_sum < a.nombre[i]) || (temp_sum < memento)){ //Overflow
+                    memento = 1;
                 }
                 else{
-                    buffer += static_cast<uint_fast64_t>(nombre[i]);
-                    buffer -= static_cast<uint_fast64_t>(a.nombre[i]);
-                    buffer -= static_cast<uint_fast64_t>(memento);
-                    b.push_back(static_cast<uint_fast32_t>(buffer));
-                    memento = 1;
-                    buffer = 0x100000000;
+                    if(nombre[i] >= temp_sum){
+                        memento = 0;
+                    }
+                    else{
+                        memento = 1;
+                    }
                 }
             }
             else{
@@ -562,11 +560,8 @@ void sel::LargeInt::operator-=(LargeInt const& a){
         i++;
     }
 
-    while(b[b.size()-1] == 0){
+    while(b.size() > 1 && b[b.size()-1] == 0){
         b.pop_back();
-        if(b.size() == 1){
-            break;
-        }
     }
 
     nombre.swap(b);
