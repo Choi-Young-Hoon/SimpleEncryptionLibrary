@@ -93,7 +93,7 @@ namespace sel
 		void ToTheLeft();
 		void Generate(unsigned int taille);
 		uint32_t GetFirst();
-		uint_fast32_t size();
+		uint32_t size();
 
 		bool getbit(const uint32_t position);
 		void setbit(const bool bit, const uint32_t position);
@@ -118,6 +118,10 @@ namespace sel
 
 		void operator%=(LargeInt const& a);
 		LargeInt operator%(LargeInt const& a);
+
+		void operator<<=(const uint32_t shifts);
+
+		void operator>>=(const uint32_t shifts);
 
 	private:
 		std::vector<uint32_t> nombre;

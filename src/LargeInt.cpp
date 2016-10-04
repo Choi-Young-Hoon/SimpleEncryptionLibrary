@@ -88,11 +88,11 @@ void sel::LargeInt::setbit(const bool bit, const uint32_t position){
 }
 
 //Size
-uint_fast32_t sel::LargeInt::size(){
+uint32_t sel::LargeInt::size(){
 
-    uint_fast32_t l = this->nombre.size();
+    uint32_t l = this->nombre.size();
 
-    uint_fast32_t last = this->nombre[l-1];
+    uint32_t last = this->nombre[l-1];
 
     if (last == 0){
         return 0;
@@ -100,7 +100,7 @@ uint_fast32_t sel::LargeInt::size(){
 
     l >> 5;
 
-    for (uint_fast32_t i=0x80000000; i>0; i=i>>1){
+    for(uint32_t i=0x80000000; i>0; i>>=1){
         if((last & i) > 0){
             break;
         }
@@ -133,7 +133,6 @@ sel::LargeInt::LargeInt(unsigned char a[], unsigned int size){
 
 //Copy from another LargeInt
 sel::LargeInt::LargeInt(LargeInt const& a){
-    //nombre.resize(a.nombre.size());
     nombre = a.nombre;
 }
 
@@ -629,38 +628,31 @@ void sel::LargeInt::RussianMultiplication(LargeInt const& a, LargeInt const& b){
 //Assignment by remainder
 void sel::LargeInt::operator%=(LargeInt const &a){
 
-    LargeInt gamma(a), n(0), alpha(1), beta(0), reste(0), aa(*this), bb(a), buffer(0), reste2(0), un(1), zero(0);
+    LargeInt gamma(a), alpha(1), beta(0), remainder(0), dividend(*this), divisor(a), remainder2(0), un(1), zero(0);
+    uint32_t n = 0;
 
-    if((bb == un) || (aa == bb)){
-        nombre.resize(1);
-        nombre[0] = 0;
+    if((divisor == un) || (dividend == divisor)){
+        nombre.clear();
+        nombre.insert(nombre.begin(), 0);
     }
-    else if(aa > bb){
-
-        while(gamma <= aa){
-            n += un;
+    else if(dividend > divisor)
+    {
+        while(gamma <= dividend){
+            n++;
             gamma.ToTheLeft();
         }
 
-        //gamma = zero;
-
-        for(LargeInt i(1); i < n; i += un){ //Alpha = 2^(n-1)
-            alpha.ToTheLeft();
-        }
+        alpha <<= n - 1; //Alpha = 2^(n-1)
 
         beta = alpha;
         beta.ToTheLeft(); //Beta = 2^n = 2^(n-1) * 2 = Alpha * 2
 
-        for(LargeInt j(0); j < n; j += un){
-            gamma = alpha;
-            gamma += beta;
+        for(uint32_t j = 0; j < n; j++){
+            gamma = alpha + beta;
 
             gamma.ToTheRight();
 
-            buffer = gamma;
-            buffer *= bb;
-
-            if(buffer <= aa){
+            if(gamma * divisor <= dividend){
                 alpha = gamma;
             }
             else{
@@ -668,35 +660,32 @@ void sel::LargeInt::operator%=(LargeInt const &a){
             }
         }
 
-        reste = aa;
+        remainder = dividend;
 
-        reste2 = alpha;
+        remainder2 = alpha * divisor;
 
-        reste2 *= bb;
-
-        if(reste2 > reste){
+        if(remainder2 > remainder){
             //Error
             std::cout << "Error remainder 1" << std::endl;
         }
 
-        if(reste2 == reste){
-            reste = zero;
+        if(remainder2 == remainder){
+            remainder = zero;
         }
-        else if(reste2 < reste){
-            reste -= reste2;
+        else if(remainder2 < remainder){
+            remainder -= remainder2;
         }
 
-        if(reste >= bb){
+        if(remainder >= divisor){
             //Error
             std::cout << "Error remainder 2" << std::endl;
         }
 
-        nombre.swap(reste.nombre);
-
+        nombre.swap(remainder.nombre);
     }
 }
 
-//Reminder
+//Remainder
 sel::LargeInt sel::LargeInt::operator%(LargeInt const& a){
     LargeInt b(*this);
     b %= a;
@@ -721,4 +710,28 @@ void sel::LargeInt::Modular_Exp(LargeInt& exposant, LargeInt& modulo){
     }
 
     nombre.swap(result.nombre);
+}
+
+void sel::LargeInt::operator<<=(const uint32_t shifts){
+    uint32_t shifts_32 = shifts >> 5, shifts_left = shifts % 32;
+
+    for(shifts_32; shifts_32 > 0; shifts_32--){
+        nombre.insert(nombre.begin(), 0);
+    }
+
+    for(shifts_left; shifts_left > 0; shifts_left--){
+        (*this).ToTheLeft();
+    }
+}
+
+void sel::LargeInt::operator>>=(const uint32_t shifts){
+    uint32_t shifts_32 = shifts >> 5, shifts_left = shifts % 32;
+
+    for(shifts_32; shifts_32 > 0; shifts_32--){
+        nombre.erase(nombre.begin());
+    }
+
+    for(shifts_left; shifts_left > 0; shifts_left--){
+        (*this).ToTheRight();
+    }
 }
