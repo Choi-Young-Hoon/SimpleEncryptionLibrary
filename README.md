@@ -35,6 +35,11 @@ Also, you can compile Release or/and Debug version of it.
 
 Then you have to compile it with a compiler like MinGW32, Visual C++ ...
 
+### Requirements
+
+* C++11
+* 64 bits CPU (uint8_t uint16_t uint32_t uint64_t)
+
 ### Linux
 
 - ``` cmake ./CMakeLists.txt  ```

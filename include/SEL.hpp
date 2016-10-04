@@ -92,7 +92,7 @@ namespace sel
 		void ToTheRight();
 		void ToTheLeft();
 		void Generate(unsigned int taille);
-		unsigned int GetFirst();
+		uint32_t GetFirst();
 		uint_fast32_t size();
 
 		bool getbit(const uint32_t position);

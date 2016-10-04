@@ -222,7 +222,7 @@ std::vector<uint32_t> sel::LargeInt::asVector(void){
 
 //Show the LargeInt value in the console
 const void sel::LargeInt::Show(){
-    for(int i = nombre.size() - 1; i >= 0; i--){
+    for(int16_t i = nombre.size() - 1; i >= 0; i--){
         std::cout << std::hex << nombre[i] << " ";
     }
     std::cout << std::endl;
@@ -230,41 +230,33 @@ const void sel::LargeInt::Show(){
 
 //Move to the right all the bits of the LargeInt
 void sel::LargeInt::ToTheRight(){
-    unsigned int buffer = 0, numbersize = nombre.size();
-    for(signed int i = (numbersize - 1); i >= 0; i--){
-        if((nombre[i]&1)>0){
-            nombre[i]>>=1;
-            nombre[i]+= (buffer*0x80000000);
-            buffer = 1;
-        }
-        else{
-            nombre[i]>>=1;
-            nombre[i]+= (buffer*0x80000000);
-            buffer = 0;
-        }
+    uint8_t buffer = 0, buffer_before = 0;
+    uint16_t numbersize = nombre.size();
+
+    for(int16_t i = (numbersize - 1); i >= 0; i--){
+        buffer = nombre[i] & 1;
+        nombre[i] >>= 1;
+        nombre[i] |= (buffer_before * 0x80000000);
+        buffer_before = buffer;
     }
-    if(nombre[numbersize-1] == 0 ){
-        if(numbersize > 1){
-            nombre.pop_back();
-        }
+
+    if(nombre[numbersize - 1] == 0 && numbersize > 1){
+        nombre.pop_back();
     }
 }
 
 //Move to the left all the bits of the LargeInt
 void sel::LargeInt::ToTheLeft(){
-    unsigned int buffer = 0, numbersize = nombre.size();
-    for(unsigned int i = 0; i < numbersize; i++){
-        if((nombre[i]&0x80000000)>0){
-            nombre[i]<<=1;
-            nombre[i]+=buffer;
-            buffer = 1;
-        }
-        else{
-            nombre[i]<<=1;
-            nombre[i]+=buffer;
-            buffer = 0;
-        }
+    uint8_t buffer = 0, buffer_before = 0;
+    uint16_t numbersize = nombre.size();
+
+    for(uint16_t i = 0; i < numbersize; i++){
+        buffer = (nombre[i] & 0x80000000) > 0;
+        nombre[i] <<= 1;
+        nombre[i] |= buffer_before;
+        buffer_before = buffer;
     }
+
     if(buffer != 0){
         nombre.push_back(buffer);
     }
@@ -279,10 +271,10 @@ void sel::LargeInt::Generate(unsigned int taille){
         nombre[i] = (std::rand()*std::rand()) % 0x100000000;
     }
 
-    nombre[0] = (nombre[0] & 0xFFFFFFFB);
+    nombre[0] &= 0xFFFFFFFB;
 
     if((nombre[0] & 0x01) == 0){
-        nombre[0] = (nombre[0] | 0x01);
+        nombre[0] |= 0x01;
     }
 
 }
@@ -290,24 +282,19 @@ void sel::LargeInt::Generate(unsigned int taille){
 //Generate a pseudo-random number include between two limits
 //Also this function will be improve
 void sel::LargeInt::NumberGenerator(LargeInt& maxi, LargeInt& mini){
-    unsigned int integerlenght = 0, extrasize = 1, filter = 0, random = 0;
+    uint32_t integerlenght = 0, extrasize = 1, filter = 0, random = 0;
     bool start = true;
 
     if(maxi.nombre.size() == mini.nombre.size()){
         integerlenght = maxi.nombre.size();
     }
     else{
-        integerlenght = ((rand()) % (maxi.nombre.size() - mini.nombre.size())) + mini.nombre.size();
+        integerlenght = ((std::rand()) % (maxi.nombre.size() - mini.nombre.size())) + mini.nombre.size();
     }
     nombre.resize(integerlenght);
 
-    //if(maxi.nombre[maxi.nombre.size()-1] > 0x)
-    while(extrasize < maxi.nombre[maxi.nombre.size()-1]){
+    while(extrasize != 0 && extrasize < maxi.nombre[maxi.nombre.size()-1]){
         extrasize <<= 1;
-        if(extrasize == 0){
-            //extrasize = 0xFFFFFFFF;
-            break;
-        }
     }
 
     if((extrasize == 0) || (maxi.nombre[maxi.nombre.size()-1] == 1)){
@@ -316,13 +303,13 @@ void sel::LargeInt::NumberGenerator(LargeInt& maxi, LargeInt& mini){
     else{
         filter = (extrasize - 1);
     }
+
     random = (rand()*rand()) % 0x100000000;
 
     while((*this < mini) || (*this > maxi) || (start)){
 
-        for(unsigned int k = 0; k < integerlenght; k++){
+        for(uint32_t k = 0; k < integerlenght; k++){
             random = (rand()*random) % 0x100000000;
-            //random <<= 1;
             nombre[k] = (random + rand()) % 0x100000000;
         }
 
@@ -348,8 +335,8 @@ void sel::LargeInt::NumberGenerator(LargeInt& maxi, LargeInt& mini){
     nombre[0] = (nombre[0] | 0x1);
 }
 
-//Get the fisrt array of the vector number.
-unsigned int sel::LargeInt::GetFirst(){
+//Get the first array of the vector number.
+uint32_t sel::LargeInt::GetFirst(){
     return nombre[0];
 }
 
@@ -366,7 +353,8 @@ bool sel::LargeInt::operator!=(LargeInt const& a){
 //Inferior operator
 bool sel::LargeInt::operator<(LargeInt const& a){
     bool state = false;
-    unsigned int numbersize = nombre.size(), asize = a.nombre.size();
+    uint16_t numbersize = nombre.size(), asize = a.nombre.size();
+
     if(numbersize < asize){
         return true;
     }
@@ -377,7 +365,7 @@ bool sel::LargeInt::operator<(LargeInt const& a){
         return false;
     }
     else{
-        for(int long long i = (numbersize - 1); i >= 0; i--){
+        for(int16_t i = (numbersize - 1); i >= 0; i--){
             if(nombre[i] < a.nombre[i]){
                 state = true;
                 break;
@@ -426,8 +414,6 @@ bool sel::LargeInt::operator>=(LargeInt const& a){
 
 //Equal operator
 sel::LargeInt& sel::LargeInt::operator=(LargeInt const& a){
-    //nombre.resize(a.nombre.size());
-
     nombre = a.nombre;
 
     return *this;
@@ -651,61 +637,61 @@ void sel::LargeInt::operator%=(LargeInt const &a){
     }
     else if(aa > bb){
 
-    while(gamma <= aa){
-        n += un;
-        gamma.ToTheLeft();
-    }
-
-    //gamma = zero;
-
-    for(LargeInt i(1); i < n; i += un){ //Alpha = 2^(n-1)
-        alpha.ToTheLeft();
-    }
-
-    beta = alpha;
-    beta.ToTheLeft(); //Beta = 2^n = 2^(n-1) * 2 = Alpha * 2
-
-    for(LargeInt j(0); j < n; j += un){
-        gamma = alpha;
-        gamma += beta;
-
-        gamma.ToTheRight();
-
-        buffer = gamma;
-        buffer *= bb;
-
-        if(buffer <= aa){
-            alpha = gamma;
+        while(gamma <= aa){
+            n += un;
+            gamma.ToTheLeft();
         }
-        else{
-            beta = gamma;
+
+        //gamma = zero;
+
+        for(LargeInt i(1); i < n; i += un){ //Alpha = 2^(n-1)
+            alpha.ToTheLeft();
         }
-    }
 
-    reste = aa;
+        beta = alpha;
+        beta.ToTheLeft(); //Beta = 2^n = 2^(n-1) * 2 = Alpha * 2
 
-    reste2 = alpha;
+        for(LargeInt j(0); j < n; j += un){
+            gamma = alpha;
+            gamma += beta;
 
-    reste2 *= bb;
+            gamma.ToTheRight();
 
-    if(reste2 > reste){
-        //Error
-        std::cout << "Error remainder 1" << std::endl;
-    }
+            buffer = gamma;
+            buffer *= bb;
 
-    if(reste2 == reste){
-        reste = zero;
-    }
-    else if(reste2 < reste){
-        reste -= reste2;
-    }
+            if(buffer <= aa){
+                alpha = gamma;
+            }
+            else{
+                beta = gamma;
+            }
+        }
 
-    if(reste >= bb){
-        //Error
-        std::cout << "Error remainder 2" << std::endl;
-    }
+        reste = aa;
 
-    nombre.swap(reste.nombre);
+        reste2 = alpha;
+
+        reste2 *= bb;
+
+        if(reste2 > reste){
+            //Error
+            std::cout << "Error remainder 1" << std::endl;
+        }
+
+        if(reste2 == reste){
+            reste = zero;
+        }
+        else if(reste2 < reste){
+            reste -= reste2;
+        }
+
+        if(reste >= bb){
+            //Error
+            std::cout << "Error remainder 2" << std::endl;
+        }
+
+        nombre.swap(reste.nombre);
 
     }
 }
@@ -719,7 +705,7 @@ sel::LargeInt sel::LargeInt::operator%(LargeInt const& a){
 
 //Modular Exponentiation
 void sel::LargeInt::Modular_Exp(LargeInt& exposant, LargeInt& modulo){
-    LargeInt result(1), base2(*this), base3(base2), modulo2(modulo), nul(0);
+    LargeInt result(1), base2(*this), modulo2(modulo), nul(0);
 
     for(sel::LargeInt exposant2(exposant); exposant2 > nul; exposant2.ToTheRight()){
         if((exposant2.nombre[0] & 0x1) > 0){
