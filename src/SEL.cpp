@@ -162,12 +162,12 @@ sel::LargeInt sel::Karatsuba(sel::LargeInt& N, sel::LargeInt& M){
     unsigned int k = 0, aka = 0;
 
     if (N < M){
-        k = N.size();
-        aka = M.size();
+        k = N.size_bits();
+        aka = M.size_bits();
     }
     else{
-        k = M.size();
-        aka = N.size();
+        k = M.size_bits();
+        aka = N.size_bits();
     }
 
     sel::LargeInt a(0), b(0), c(0), d(0), P1(0), P2(0), P3(0), A(0), B(0), S(0), zero(0), S1(0), S2(0), atemp(0), ctemp(0);

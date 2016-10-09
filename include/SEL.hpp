@@ -71,7 +71,7 @@ namespace sel
 		LargeInt();
 		LargeInt(std::string a);
 		LargeInt(std::vector<uint32_t> &a);
-		LargeInt(unsigned char a[], unsigned int size);
+		LargeInt(unsigned char a[], uint16_t size);
 		LargeInt(LargeInt const& a);
 		LargeInt(unsigned int a);
 		~LargeInt();
@@ -80,11 +80,13 @@ namespace sel
 		std::string as64String(void);
 		std::vector<uint32_t> asVector(void);
 
-		void RussianMultiplication(LargeInt const& a, LargeInt const& b);
+		LargeInt mul_russian(LargeInt const& b);
 		void Modular_Exp(LargeInt& exposant, LargeInt& modulo);
-		void NumberGenerator(LargeInt& maxi, LargeInt& mini);
+		LargeInt mul_karatsuba(LargeInt const& b);
 
+		void NumberGenerator(LargeInt& maxi, LargeInt& mini);
 		void BitGenerator(unsigned int lenght);
+
 		bool FermatPrimality(void);
 		LargeInt EuclideAlgoPGCD(LargeInt& b);
 		bool MillerRabinPrimality(unsigned int iterations);
@@ -93,7 +95,8 @@ namespace sel
 		void ToTheLeft();
 		void Generate(unsigned int taille);
 		uint32_t GetFirst();
-		uint32_t size();
+
+		uint32_t size_bits();
 
 		bool getbit(const uint32_t position);
 		void setbit(const bool bit, const uint32_t position);

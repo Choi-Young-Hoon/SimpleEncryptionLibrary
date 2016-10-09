@@ -88,7 +88,7 @@ void sel::LargeInt::setbit(const bool bit, const uint32_t position){
 }
 
 //Size
-uint32_t sel::LargeInt::size(){
+uint32_t sel::LargeInt::size_bits(){
 
     uint32_t l = this->nombre.size();
 
@@ -98,7 +98,7 @@ uint32_t sel::LargeInt::size(){
         return 0;
     }
 
-    l >> 5;
+    l <<= 5;
 
     for(uint32_t i=0x80000000; i>0; i>>=1){
         if((last & i) > 0){
@@ -115,12 +115,12 @@ uint32_t sel::LargeInt::size(){
 }
 
 //Char to LargeInt
-sel::LargeInt::LargeInt(unsigned char a[], unsigned int size){
-    unsigned int taille = ceil(size / 4.0), h = 0;
+sel::LargeInt::LargeInt(unsigned char a[], uint16_t size){
+    uint16_t taille = ceil(size / 4.0), h = 0;
     nombre.resize(taille);
-    for(unsigned int i = 0; i < taille; i++){
+    for(uint16_t i = 0; i < taille; i++){
         nombre[i] = 0;
-		for(unsigned int j = 0; j < 4; j++){
+		for(uint16_t j = 0; j < 4; j++){
 			h = i<<2 + j;
 			if(h < size){
 				h = a[h];
@@ -602,16 +602,16 @@ sel::LargeInt sel::LargeInt::operator*(LargeInt const& a){
     return b;
 }
 
-//Product very slow
-void sel::LargeInt::RussianMultiplication(LargeInt const& a, LargeInt const& b){
-    LargeInt result(0), zero(0), x(0), y(0), aa(a), bb(b);
+//Multiplication very slow
+sel::LargeInt sel::LargeInt::mul_russian(LargeInt const& b){
+    LargeInt result(0), zero(0), x(0), y(0), aa(*this), bb(b);
 
     if(aa > bb){
         x = b;
-        y = a;
+        y = *this;
     }
     else{
-        x = a;
+        x = *this;
         y = b;
     }
 
@@ -622,7 +622,13 @@ void sel::LargeInt::RussianMultiplication(LargeInt const& a, LargeInt const& b){
         x.ToTheRight();
         y.ToTheLeft();
     }
-    nombre.swap(result.nombre);
+    return result;
+}
+
+sel::LargeInt sel::LargeInt::mul_karatsuba(LargeInt const& b){
+    sel::LargeInt result(0);
+
+    return result;
 }
 
 //Assignment by remainder
@@ -637,6 +643,11 @@ void sel::LargeInt::operator%=(LargeInt const &a){
     }
     else if(dividend > divisor)
     {
+
+        n = dividend.size_bits() - gamma.size_bits();
+
+        gamma <<= n;
+
         while(gamma <= dividend){
             n++;
             gamma.ToTheLeft();
