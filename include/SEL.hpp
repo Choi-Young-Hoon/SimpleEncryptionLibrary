@@ -135,8 +135,13 @@ namespace sel
 		void operator|=(LargeInt const& y);
 		LargeInt operator|(LargeInt const& y);
 
+		void operator^=(LargeInt const& y);
+		LargeInt operator^(LargeInt const& y);
+
+		LargeInt operator~(void);
+
 	private:
-		std::vector<uint32_t> nombre;
+		std::vector<uint32_t> number;
 	};
 
 	/*
