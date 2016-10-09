@@ -205,6 +205,15 @@ int main(){
             std::cout << "Multiplication : FAILED" << std::endl;
 		}
 
+		sel::LargeInt bigintegermul_karatsuba(biginteger1.mul_karatsuba(biginteger2));
+
+		if(bigintegermul_karatsuba == bigintegermulresult){
+            std::cout << "Multiplication Karatsuba : CHECKED" << std::endl;
+		}
+		else{
+            std::cout << "Multiplication Karatsuba : FAILED" << std::endl;
+		}
+
 		sel::LargeInt bigintegermod = biginteger1 % biginteger2, bigintegermodresult("13024125351727A6");
 
 		if(bigintegermul == bigintegermulresult){

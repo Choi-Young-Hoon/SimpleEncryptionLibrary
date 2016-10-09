@@ -76,7 +76,7 @@ namespace sel
 		LargeInt(unsigned int a);
 		~LargeInt();
 
-		const void Show();
+		void Show() const;
 		std::string as64String(void);
 		std::vector<uint32_t> asVector(void);
 
@@ -96,7 +96,8 @@ namespace sel
 		void Generate(unsigned int taille);
 		uint32_t GetFirst();
 
-		uint32_t size_bits();
+		uint32_t size_bits() const;
+		uint32_t size() const;
 
 		bool getbit(const uint32_t position);
 		void setbit(const bool bit, const uint32_t position);
@@ -123,8 +124,16 @@ namespace sel
 		LargeInt operator%(LargeInt const& a);
 
 		void operator<<=(const uint32_t shifts);
+		LargeInt operator<<(const uint32_t shifts);
 
 		void operator>>=(const uint32_t shifts);
+		LargeInt operator>>(const uint32_t shifts);
+
+		void operator&=(LargeInt const& y);
+		LargeInt operator&(LargeInt const& y);
+
+		void operator|=(LargeInt const& y);
+		LargeInt operator|(LargeInt const& y);
 
 	private:
 		std::vector<uint32_t> nombre;

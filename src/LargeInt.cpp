@@ -87,8 +87,8 @@ void sel::LargeInt::setbit(const bool bit, const uint32_t position){
     }
 }
 
-//Size
-uint32_t sel::LargeInt::size_bits(){
+//Number of bits
+uint32_t sel::LargeInt::size_bits() const {
 
     uint32_t l = this->nombre.size();
 
@@ -112,6 +112,11 @@ uint32_t sel::LargeInt::size_bits(){
         }
     }
     return l;
+}
+
+//Number of element in vector
+uint32_t sel::LargeInt::size() const {
+    return nombre.size();
 }
 
 //Char to LargeInt
@@ -220,7 +225,7 @@ std::vector<uint32_t> sel::LargeInt::asVector(void){
 }
 
 //Show the LargeInt value in the console
-const void sel::LargeInt::Show(){
+void sel::LargeInt::Show() const{
     for(int16_t i = nombre.size() - 1; i >= 0; i--){
         std::cout << std::hex << nombre[i] << " ";
     }
@@ -341,12 +346,12 @@ uint32_t sel::LargeInt::GetFirst(){
 
 //Is equal operator
 bool sel::LargeInt::operator==(LargeInt const& a){
-    return(nombre == a.nombre);
+    return (nombre == a.nombre);
 }
 
 //Isn't equal operator
 bool sel::LargeInt::operator!=(LargeInt const& a){
-    return !(*this == a);
+    return (nombre != a.nombre);
 }
 
 //Inferior operator
@@ -430,7 +435,7 @@ void sel::LargeInt::operator+=(LargeInt const& a){
             if(i < a.nombre.size()){
                 buffer = a.nombre[i] + memento;
 
-                if((buffer < a.nombre[i]) || (buffer < memento)){ //Overflow
+                if(buffer < a.nombre[i]){ //Overflow
                     memento = 1;
                 }
                 else{
@@ -452,7 +457,7 @@ void sel::LargeInt::operator+=(LargeInt const& a){
             if(i < a.nombre.size()){
                 buffer = nombre[i] + a.nombre[i] + memento;
 
-                if((buffer < nombre[i]) || (buffer < a.nombre[i]) || (buffer < memento)){ //Overflow
+                if((buffer < nombre[i]) || (buffer < a.nombre[i])){ //Overflow
                     memento = 1;
                 }
                 else{
@@ -625,8 +630,89 @@ sel::LargeInt sel::LargeInt::mul_russian(LargeInt const& b){
     return result;
 }
 
-sel::LargeInt sel::LargeInt::mul_karatsuba(LargeInt const& b){
+sel::LargeInt sel::LargeInt::mul_karatsuba(LargeInt const& y){
+    //Cut the numbers near the middle
+    uint16_t size_of_x = (*this).size(), size_of_y = y.size(), cut_index = std::max(size_of_x, size_of_y) >> 1;
     sel::LargeInt result(0);
+
+    if(cut_index >= size_of_x){
+        std::vector<uint32_t> y_high, y_low;
+
+        for(uint16_t i = 0; i < cut_index; i++){
+            y_low.push_back(y.nombre[i]);
+        }
+
+        for(uint16_t i = cut_index; i < size_of_y; i++){
+            y_high.push_back(y.nombre[i]);
+        }
+
+        sel::LargeInt y0(y_low), y1(y_high);
+
+        result =((*this) * y0) + (((*this) * y1) << (cut_index << 5));
+    }
+    else if(cut_index >= size_of_y){
+        std::vector<uint32_t> x_high, x_low;
+
+        for(uint16_t i = 0; i < cut_index; i++){
+            x_low.push_back(nombre[i]);
+        }
+
+        for(uint16_t i = cut_index; i < size_of_x; i++){
+            x_high.push_back(nombre[i]);
+        }
+
+        sel::LargeInt x0(x_low), x1(x_high);
+
+        result =(x0 * y) + ((x1 * y) << (cut_index << 5));
+    }
+    else{
+        std::vector<uint32_t> x_high, x_low, y_high, y_low;
+        bool add = false;
+
+        for(uint16_t i = 0; i < cut_index; i++){
+            x_low.push_back(nombre[i]);
+        }
+
+        for(uint16_t i = cut_index; i < size_of_x; i++){
+            x_high.push_back(nombre[i]);
+        }
+
+        for(uint16_t i = 0; i < cut_index; i++){
+            y_low.push_back(y.nombre[i]);
+        }
+
+        for(uint16_t i = cut_index; i < size_of_y; i++){
+            y_high.push_back(y.nombre[i]);
+        }
+
+        sel::LargeInt x0(x_low), x1(x_high), y0(y_low), y1(y_high), sum(0), one(1), power_separator(1);
+        power_separator <<= ((cut_index) << 5);
+
+        if(x1 < x0){
+            add = ~add;
+            sum = x0 - x1;
+        }
+        else{
+            sum = x1 - x0;
+        }
+
+        if(y1 < y0){
+            add = ~add;
+            sum *= (y0 - y1);
+        }
+        else{
+            sum *= (y1 - y0);
+        }
+
+        result = ((power_separator * power_separator + power_separator) * x1 * y1) + ((power_separator + one) * x0 * y0);
+
+        if(add){
+            result += power_separator * sum;
+        }
+        else{
+            result -= power_separator * sum;
+        }
+    }
 
     return result;
 }
@@ -745,4 +831,56 @@ void sel::LargeInt::operator>>=(const uint32_t shifts){
     for(shifts_left; shifts_left > 0; shifts_left--){
         (*this).ToTheRight();
     }
+}
+
+sel::LargeInt sel::LargeInt::operator<<(const uint32_t shifts){
+    sel::LargeInt result(*this);
+
+    result <<= shifts;
+
+    return result;
+}
+
+sel::LargeInt sel::LargeInt::operator>>(const uint32_t shifts){
+    sel::LargeInt result(*this);
+
+    result >>= shifts;
+
+    return result;
+}
+
+void sel::LargeInt::operator&=(LargeInt const& y){
+    for(uint16_t i = 0; i < std::min(nombre.size(), y.nombre.size()); i++){
+        nombre[i] &= y.nombre[i];
+    }
+
+    while(nombre.size() > y.size()){
+        nombre.pop_back();
+    }
+}
+
+sel::LargeInt sel::LargeInt::operator&(LargeInt const& y){
+    sel::LargeInt result(*this);
+
+    result &= y;
+
+    return result;
+}
+
+void sel::LargeInt::operator|=(LargeInt const& y){
+    for(uint16_t i = 0; i < std::min(nombre.size(), y.nombre.size()); i++){
+        nombre[i] |= y.nombre[i];
+    }
+
+    for(uint16_t i = nombre.size(); i < y.size(); i++){
+        nombre.push_back(y.nombre[i]);
+    }
+}
+
+sel::LargeInt sel::LargeInt::operator|(LargeInt const& y){
+    sel::LargeInt result(*this);
+
+    result |= y;
+
+    return result;
 }
