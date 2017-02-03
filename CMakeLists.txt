@@ -9,9 +9,13 @@ option(BUILD_TEST_PROGRAM "Build the example" TRUE)
 
 option(CMAKE_BUILD_TYPE "Build Type : Release or Debug")
 
-set(LIBRARY_OUTPUT_PATH ../build-sel/lib/${CMAKE_BUILD_TYPE})
+set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/build/lib/${CMAKE_BUILD_TYPE})
 
-set(EXECUTABLE_OUTPUT_PATH ../build-sel/bin/${CMAKE_BUILD_TYPE})
+file(MAKE_DIRECTORY ${LIBRARY_OUTPUT_PATH})
+
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/build/bin/${CMAKE_BUILD_TYPE})
+
+file(MAKE_DIRECTORY ${EXECUTABLE_OUTPUT_PATH})
 
 option(BUILD_SHARED_LIBS "TRUE to build AEL as shared library, FALSE to build it as static library" TRUE)
 
