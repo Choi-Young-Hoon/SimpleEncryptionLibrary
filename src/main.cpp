@@ -31,19 +31,19 @@ int main(int argc, char *argv[]){
 
 		std::cout << "Simple Encryption Library Alpha 0.4.0" << std::endl << std::endl;
 
-        if (argc <= 1){
-            return 0;
-        }
+    if (argc <= 1){
+        return 0;
+    }
 
-        if (!strcmp(argv[1], "encrypt") && argc >= 5){
-            std::string argv2 = argv[2];
-            if (!strcmp(argv[2], "AES")){
-                sel::AES key(argv[3]);
-                std::cout << key.Encrypt(argv[4]) << std::endl;
-            }
-            std::cout << "OK" << std::endl;
+    if (!strcmp(argv[1], "encrypt") && argc >= 5){
+        std::string argv2 = argv[2];
+        if (!strcmp(argv[2], "AES")){
+            sel::AES key(argv[3]);
+            std::cout << key.Encrypt(argv[4]) << std::endl;
         }
+        std::cout << "OK" << std::endl;
+    }
 
-        std::cout << "Done" << std::endl;
-        std::getchar();
+    std::cout << "Done" << std::endl;
+    return EXIT_SUCCESS;
 }

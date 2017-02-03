@@ -28,10 +28,10 @@
 #include "SEL.hpp"
 
 bool TestDiffieHellman(void){
-    sel::LargeInt p(0), g(0), A(0), B(0), a(0), b(0), s1(0), s2(0), one(1), two(2), six(6), p1(0), p2(0);
+    sel::LargeInt p(0), g(3), A(0), B(0), a(0), b(0), s1(0), s2(0), one(1), two(2), six(6), p1(0), p2(0);
 
     //p.BitGenerator(1024);
-    p.Generate(4); //128 Bits
+    p.Generate(4); //128 bits
     p = p*six;
     p1 = p - one;
     p2 = p + one;
@@ -45,8 +45,6 @@ bool TestDiffieHellman(void){
         //p2.Generate(8);
         std::cout << "ONE TURN" << std::endl;
     }
-
-    g.BitGenerator(64);
 
     a.BitGenerator(384);
 
